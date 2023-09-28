@@ -1,7 +1,7 @@
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
 import Qr from "./components/QR/Qr";
-import Scannow from "./components/Scannow/Scannow";
+import Scannow from "./components/Scannow/Scan";
 import RequireAuth from "./components/RequireAuth";
 import Missing from "./components/Missing";
 import "./App.css";
