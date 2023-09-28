@@ -42,16 +42,23 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'accounts',
+    'corsheaders',#corsheaders
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',#cors middleware must be above common middleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Replace with your React app's URL
 ]
 
 ROOT_URLCONF = 'auth_system.urls'
@@ -59,7 +66,8 @@ ROOT_URLCONF = 'auth_system.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'build')],
+        #'DIRS': [os.path.join(BASE_DIR, 'build')], #frontend production
+        'DIRS': [os.path.join(BASE_DIR, 'auth_frontend')], #frontend test
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,6 +80,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'auth_system.wsgi.application'
 
 #apppassword=krnngrrkhwxorzcg
@@ -81,9 +90,9 @@ WSGI_APPLICATION = 'auth_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'auth1',
+        'NAME': 'auth1', #database name
         'USER':'root',
-        'PASSWORD':'W@2915djkq#',
+        'PASSWORD':'qwerty00',
         'PORT':'3306',
         'HOST':'127.0.0.1',
     }
