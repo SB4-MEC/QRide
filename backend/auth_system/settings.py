@@ -67,7 +67,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         #'DIRS': [os.path.join(BASE_DIR, 'build')], #frontend production
-        'DIRS': [os.path.join(BASE_DIR, 'auth_frontend')], #frontend test
+        'DIRS': [os.path.join(BASE_DIR, 'temp_frontend')], #frontend test
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
