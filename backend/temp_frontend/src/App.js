@@ -12,7 +12,7 @@ import QRCodeScanner from "./components/QR/QRCodeScanner";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Scannow />} />
+      <Route path="/" element={<Scannow/>} />
       <Route path="/" element={<Layout />}>
         {/* public routes */}
         <Route path="login" element={<Login />} />
