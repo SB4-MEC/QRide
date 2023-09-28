@@ -5,7 +5,7 @@ import "./Qr.css";
 import bgdot from "../Assets/bgdot.png"; // Import the default background image
 import bgdot1 from "../Assets/bgdot1.png"; // Import the alternative background image
 
-export const BarcodeScanner = () => {
+const QRCodeScanner = () => {
   const navigate = useNavigate();
   const navigateToHome = () => {
     navigate("/home");
@@ -59,4 +59,4 @@ export const BarcodeScanner = () => {
   );
 };
 
-export default BarcodeScanner;
+export default QRCodeScanner;

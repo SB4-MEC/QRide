@@ -1,13 +1,13 @@
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
-import Qr from "./components/Qr/Qr";
+import Qr from "./components/QR/Qr";
 import Scannow from "./components/Scannow/Scannow";
 import RequireAuth from "./components/RequireAuth";
 import Missing from "./components/Missing";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
-import QR from "./components/QR/QRCodeScanner";
+import QRCodeScanner from "./components/QR/QRCodeScanner";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
       {/* we want to protect these routes */}
       <Route element={<RequireAuth />}>
         {/* <Route path="/Qr" element={<Qr />} /> */}
-        <Route path="QR" element={<QR />} />
+        <Route path="/QR" element={<QRCodeScanner />} />
 
       </Route>
       {/* catch all */}
