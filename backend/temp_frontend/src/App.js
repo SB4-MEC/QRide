@@ -1,6 +1,6 @@
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
-import Qr from "./components/QR/Qr";
+// import Qr from "./components/QR/Qr";
 import Scannow from "./components/Scannow/Scan";
 import RequireAuth from "./components/RequireAuth";
 import Missing from "./components/Missing";
@@ -22,7 +22,7 @@ function App() {
       {/* we want to protect these routes */}
       <Route element={<RequireAuth />}>
         {/* <Route path="/Qr" element={<Qr />} /> */}
-        <Route path="/QR" element={<QRCodeScanner />} />
+        <Route path="/Qr" element={<QRCodeScanner />} />
 
       </Route>
       {/* catch all */}
