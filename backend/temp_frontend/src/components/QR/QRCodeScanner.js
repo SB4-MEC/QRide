@@ -1,22 +1,41 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useZxing } from "react-zxing";
 import { useNavigate } from "react-router-dom";
 import "./Qr.css";
-import bgdot from "../Assets/bgdot.png"; // Import the default background image
-import bgdot1 from "../Assets/bgdot1.png"; // Import the alternative background image
+import bgdot from "../Assets/bgdot.png";
+import bgdot1 from "../Assets/bgdot1.png";
 
 const QRCodeScanner = () => {
   const navigate = useNavigate();
-  const navigateToHome = () => {
-    navigate("/home");
-  };
   const [result, setResult] = useState("");
   const { ref } = useZxing({
     onDecodeResult(result) {
-      setResult(result.getText());
-      // Redirect to the scanned URL (assuming it's a valid URL)
-      if (isValidURL(result.getText())) {
-        window.location.href = result.getText();
+      const scannedText = result.getText();
+      setResult(scannedText);
+
+      // Check if the scanned text is "Edappally"
+      if (scannedText.toLowerCase() === "http://edapally") {
+        navigate("/register");
+        } 
+         else if (scannedText.toLowerCase() === "http://thrikkakara") {
+        navigate("/register");
+         }
+         else if (scannedText.toLowerCase() === "http://pipeline") {
+        navigate("/register");
+         }
+         else if (scannedText.toLowerCase() === "http://ngo") {
+        navigate("/register");
+         }
+         else if (scannedText.toLowerCase() === "http://cusat") {
+        navigate("/register");
+         }
+        // else if (isValidURL(scannedText)) {
+        // Redirect to the scanned URL if it's a valid URL
+        // window.location.href = scannedText;
+    //   } 
+      else {
+        // Handle other cases (non-URL, non-"Edappally") as needed
+        alert(`Scanned: ${scannedText}.Please scan the correct QR code`);
       }
     },
   });
@@ -31,11 +50,9 @@ const QRCodeScanner = () => {
     }
   };
 
-  // Define the background image URL based on media query
-  let backgroundImageUrl = `url(${bgdot})`; // Default background image
-
+  let backgroundImageUrl = `url(${bgdot})`;
   if (window.innerWidth <= 425) {
-    backgroundImageUrl = `url(${bgdot1})`; // Alternative background image for smaller screens
+    backgroundImageUrl = `url(${bgdot1})`;
   }
 
   const backgroundStyle = {
@@ -43,6 +60,7 @@ const QRCodeScanner = () => {
     backgroundSize: "cover",
     height: "100vh",
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
   };
