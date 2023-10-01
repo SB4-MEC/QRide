@@ -1,0 +1,5 @@
+1. Arrow functions 
+   https://www.youtube.com/shorts/dsLqoD0vZJs
+2. Arrow functions vs normal functions
+   https://www.youtube.com/shorts/fNFweqJc-Tg
+3. 

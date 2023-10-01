@@ -19,12 +19,28 @@ function App() {
         <Route path="register" element={<Register />} />
       </Route>
 
+      {/* 
+         Less efficient
+
+         <Route path="/QR" element={
+           <RequireAuth>
+               <Qr />
+           </RequireAuth>
+          } /> 
+
+      */}
+
       {/* we want to protect these routes */}
       <Route element={<RequireAuth />}>
-        {/* <Route path="/Qr" element={<Qr />} /> */}
         <Route path="/QR" element={<QRCodeScanner />} />
-
       </Route>
+
+      {/* 
+        Efficient method for above routes
+        https://www.youtube.com/watch?v=YgNm3pVnvN0
+        
+      */}
+
       {/* catch all */}
       <Route path="*" element={<Missing />} />
     </Routes>

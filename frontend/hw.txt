@@ -1,0 +1,5 @@
+1. url and serachparams
+   https://www.youtube.com/watch?v=YgNm3pVnvN0
+2. change fetch code to react query(to handle errors,loading etc easily)
+   https://www.youtube.com/watch?v=O0-rb1B74xs
+   https://www.youtube.com/watch?v=PmPkAAu_QF4&t=854s

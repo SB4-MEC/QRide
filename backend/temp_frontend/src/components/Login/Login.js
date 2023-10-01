@@ -6,7 +6,10 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 const LOGIN_URL = "/auth";
 
 const Login = () => {
+  {/*object destructuring
+    https://www.youtube.com/watch?v=NIq3qLaHCIs  */}
   const { setAuth } = useAuth();
+
   const userRef = useRef();
   const errRef = useRef();
 
@@ -32,17 +35,33 @@ const Login = () => {
     try {
       const response = await axios.post(
         LOGIN_URL,
-        JSON.stringify({ email, pwd }),
+        JSON.stringify({ email, pwd }), //Diff between javascript objects and json strings
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
+      {/*
+        headers are used to tell the server that we are sending json data
+        withCredentials is used to send cookies along with the request, that is, credentials are sent along with the request
+      */}
       console.log(JSON.stringify(response?.data));
       //console.log(JSON.stringify(response));
+
+      //Dont forget to parse the json response to javascript object
+
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
       setAuth({ email, pwd, roles, accessToken });
+      {/*How does this auth object look now?
+        auth: {
+          email: "blabla@gmail.com"
+          pwd: "1234"
+          roles: ['100']
+          accessToken: "34gjd356ydfi"
+        }
+        
+    */}
       setEmail("");
       setPwd("");
       navigate(from, { replace: true });
