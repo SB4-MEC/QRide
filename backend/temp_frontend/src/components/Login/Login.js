@@ -3,12 +3,12 @@ import { useRef, useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import axios from "../../api/Axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-const LOGIN_URL = "/auth";
+const LOGIN_URL = "/auth/jwt/create/";
 
 const Login = () => {
   {/*object destructuring
     https://www.youtube.com/watch?v=NIq3qLaHCIs  */}
-  const { setAuth } = useAuth();
+  const { setAuth,setLogged,setCookie } = useAuth();
 
   const userRef = useRef();
   const errRef = useRef();
@@ -18,7 +18,7 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/";
 
   const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [password, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
@@ -35,12 +35,15 @@ const Login = () => {
     try {
       const response = await axios.post(
         LOGIN_URL,
-        JSON.stringify({ email, pwd }), //Diff between javascript objects and json strings
+        JSON.stringify({ email, password }), //Diff between javascript objects and json strings
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
+
+      console.log(data)
+        setCookie("auth_token", data.access)
       {/*
         headers are used to tell the server that we are sending json data
         withCredentials is used to send cookies along with the request, that is, credentials are sent along with the request
@@ -50,9 +53,10 @@ const Login = () => {
 
       //Dont forget to parse the json response to javascript object
 
-      const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
-      setAuth({ email, pwd, roles, accessToken });
+      const accessToken = response?.data?.access;
+      const refreshToken = response?.data?.refresh;
+      setAuth({ email, pwd, accessToken, refreshToken });
+      setLogged(true);
       {/*How does this auth object look now?
         auth: {
           email: "blabla@gmail.com"
@@ -62,8 +66,7 @@ const Login = () => {
         }
         
     */}
-      setEmail("");
-      setPwd("");
+      
       navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {
@@ -114,13 +117,13 @@ const Login = () => {
             id="password"
             placeholder="Enter password"
             onChange={(e) => setPwd(e.target.value)}
-            value={pwd}
+            value={password}
             required
             className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
           />
 
           <button className="flex text-xl font-medium bg-black text-white py-2 px-8 rounded-3xl items-center justify-center hover:bg-[#27272a]">
-            Sign In
+            Login
           </button>
         </form>
         <p className="font-normal px-2 text-sm">

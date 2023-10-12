@@ -1,23 +1,33 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "../../api/Axios";
-import { Link } from "react-router-dom";
-const REGISTER_URL = "/register";
-const RECEIVE_MAIL_URL = "/receive_mail";
+import { Link,useNavigate } from "react-router-dom";
+const REGISTER_URL = "/auth/users/";
+
 
 const Register = () => {
-  const [first_name, setFirst] = useState("");
-  const [last_name, setLast] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPwd] = useState("");
-  const [re_password, setRePassword] = useState("");
+  const [user, setUser] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    re_password: "",
+  })
 
-  const [errMsg, setErrMsg] = useState("");
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
+      const create_user_response = await axios.post(
         REGISTER_URL,
         JSON.stringify({ email, first_name, last_name, password, re_password }),
         {
@@ -25,27 +35,11 @@ const Register = () => {
           withCredentials: true,
         }
       );
-      console.log(response);
-      // Step 2: Send a request to receive mail (assuming it sends the verification email)
-      await axios.post(RECEIVE_MAIL_URL, {});
       
-      //uid and token is obtained from the url pattern of the email verification link
-      //http://localhost:8000/activate/uid/token
+      navigate("/login");
       
-
-      console.log(emailVerificationResponse?.uid);
-      console.log(emailVerificationResponse?.token);
-      console.log(JSON.stringify(emailVerificationResponse));
-
-      //clear state and controlled inputs
-
-      setFirst("");
-      setLast("");
-      setEmail("");
-      setPwd("");
-      setRePassword("");
     } catch (err) {
-      if (!err?.response) {
+      if (!err?.create_user_response) {
         //Show server not found page
         setErrMsg("No Server Response");
       } else {
@@ -70,8 +64,7 @@ const Register = () => {
             id="username"
             placeholder="Enter first name"
             autoComplete="off"
-            onChange={(e) => setFirst(e.target.value)}
-            value={first_name}
+            onChange={handleChange}
             required
             className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
           />
@@ -81,8 +74,7 @@ const Register = () => {
             id="username"
             placeholder="Enter last name"
             autoComplete="off"
-            onChange={(e) => setLast(e.target.value)}
-            value={last_name}
+            onChange={handleChange}
             required
             className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
           />
@@ -91,8 +83,7 @@ const Register = () => {
             type="email"
             id="email"
             placeholder="Enter email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            onChange={handleChange}
             required
             className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
           />
@@ -101,8 +92,7 @@ const Register = () => {
             type="password"
             id="password"
             placeholder="Enter password"
-            onChange={(e) => setPwd(e.target.value)}
-            value={password}
+            onChange={handleChange}
             required
             className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
           />
@@ -111,15 +101,14 @@ const Register = () => {
             type="repassword"
             id="repassword"
             placeholder="Reenter password"
-            onChange={(e) => setRePassword(e.target.value)}
-            value={re_password}
+            onChange={handleChange}
             required
             className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
           />
 
           <button
             className="flex text-xl font-medium bg-black text-white py-2 px-8 rounded-3xl items-center justify-center hover:bg-[#27272a]"
-            onClick={handleSubmit}
+            type="submit"
           >
             Register
           </button>
