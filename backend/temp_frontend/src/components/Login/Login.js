@@ -6,16 +6,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 const LOGIN_URL = "/auth/jwt/create/";
 
 const Login = () => {
-  {/*object destructuring
-    https://www.youtube.com/watch?v=NIq3qLaHCIs  */}
-  const { setAuth,setLogged,setCookie } = useAuth();
+  const { login } = useAuth();
 
   const userRef = useRef();
   const errRef = useRef();
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
 
   const [email, setEmail] = useState("");
   const [password, setPwd] = useState("");
@@ -27,7 +23,7 @@ const Login = () => {
 
   useEffect(() => {
     setErrMsg("");
-  }, [email, pwd]);
+  }, [email, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,33 +37,16 @@ const Login = () => {
           withCredentials: true,
         }
       );
+      if (response.status === 200) {
+        const { access_token, refresh_token } = response.data;
 
-      console.log(data)
-        setCookie("auth_token", data.access)
-      {/*
-        headers are used to tell the server that we are sending json data
-        withCredentials is used to send cookies along with the request, that is, credentials are sent along with the request
-      */}
-      console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response));
-
-      //Dont forget to parse the json response to javascript object
-
-      const accessToken = response?.data?.access;
-      const refreshToken = response?.data?.refresh;
-      setAuth({ email, pwd, accessToken, refreshToken });
-      setLogged(true);
-      {/*How does this auth object look now?
-        auth: {
-          email: "blabla@gmail.com"
-          pwd: "1234"
-          roles: ['100']
-          accessToken: "34gjd356ydfi"
-        }
-        
-    */}
-      
-      navigate(from, { replace: true });
+        // The login function should handle updating tokens in cookies and context state.
+        login(access_token, refresh_token);
+        setErrMsg("");
+        navigate("/QR");
+      } else {
+        setErrMsg("Invalid email or password");
+      }
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -79,12 +58,12 @@ const Login = () => {
         setErrMsg("Login Failed");
       }
       errRef.current.focus();
+      console.log(errMsg);
     }
   };
 
   return (
     <>
-      
       <div className="flex flex-col w-full h-full justify-center items-center py-4 gap-2">
         {/*<p
           ref={errRef}
@@ -127,10 +106,11 @@ const Login = () => {
           </button>
         </form>
         <p className="font-normal px-2 text-sm">
-          Need an Account? 
-         
-            <Link to="/register" className="text-blue-600 text-base "> Register</Link>
-          
+          Need an Account?
+          <Link to="/register" className="text-blue-600 text-base ">
+            {" "}
+            Register
+          </Link>
         </p>
       </div>
     </>

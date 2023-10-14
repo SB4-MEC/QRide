@@ -1,7 +1,7 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import axios from "../../api/Axios";
-import { Link,useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 const REGISTER_URL = "/auth/users/";
 
 
@@ -13,8 +13,7 @@ const Register = () => {
     password: "",
     re_password: "",
   })
-
-  const navigate = useNavigate();
+  const [errMsg, setErrMsg] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -29,18 +28,25 @@ const Register = () => {
     try {
       const create_user_response = await axios.post(
         REGISTER_URL,
-        JSON.stringify({ email, first_name, last_name, password, re_password }),
+        JSON.stringify({ user}),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
-      
-      navigate("/login");
-      
+  
+      // Check if the registration was successful
+      if (create_user_response.status === 200) {
+        console.log("Registration successful. Email will be sent in the background.");
+      } else {
+        // Registration failed
+        setErrMsg("Registration Failed");
+        console.log(errMsg);
+      }
     } catch (err) {
+      // Handle errors here
       if (!err?.create_user_response) {
-        //Show server not found page
+        // Show server not found page
         setErrMsg("No Server Response");
       } else {
         setErrMsg("Registration Failed");
@@ -48,7 +54,8 @@ const Register = () => {
       }
     }
   };
-
+  
+  
   return (
     <>
       <div className="flex flex-col w-full h-full justify-center items-center gap-4">

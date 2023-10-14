@@ -4,21 +4,21 @@ import { CookiesProvider } from "react-cookie";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { AuthProvider } from "./context/AuthProvider";
+import AuthProvider from "./context/AuthProvider";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <CookiesProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <CookiesProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/*" element={<App />} />
           </Routes>
         </BrowserRouter>
-      </AuthProvider>
-    </CookiesProvider>
+      </CookiesProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
 

@@ -1,44 +1,38 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
+const EMAIL_VERIFICATION_URL = '/auth/users/activation/';
 
-const VerifyEmail = () => {
-  const { uid, access_token } = useParams();
+const VerificationPage = () => {
+  const { uid, token } = useParams();
+  const navigate = useNavigate();
+  const [verificationMessage, setVerificationMessage] = useState('');
 
-  const verifyEmail = async () => {
+  const handleVerification = async () => {
     try {
-      const response = await axios.get(
-        VERIFY_URL,
-        {
-          uid,
-          token: access_token,
-        },
+      await axios.get(EMAIL_VERIFICATION_URL, {
+        params: { uid, token },
+      });
 
-        {
-          headers: {
-            "Content-Type": "application/json",
-            withCredentials: true,
-          },
-        }
-      );
-
-      // Handle a successful verification response
-      console.log("Email verified:", response.data);
+      // The verification call was successful
+      console.log('Email verification successful.');
+      navigate('/login');
+      setVerificationMessage('Email verification successful.');
     } catch (error) {
-      // Handle any errors that may occur during verification
-      console.error("Email verification failed:", error);
+      // Handle any errors if necessary
+      console.error('Email verification failed:', error);
+      setVerificationMessage('Email verification failed.');
     }
   };
 
-  // Call the verification function immediately when the component renders
-  verifyEmail();
-
   return (
     <div>
-      <h2>Verifying Email...</h2>
-      {/* You can add loading indicators or messages here while the verification process is ongoing */}
+      <h2>Email Verification Page</h2>
+      <p>{verificationMessage}</p>
+      <button onClick={handleVerification}>Verify</button>
     </div>
   );
 };
 
-export default VerifyEmail;
+export default VerificationPage;
+

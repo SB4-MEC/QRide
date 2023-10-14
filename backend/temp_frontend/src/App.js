@@ -9,13 +9,14 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import QRCodeScanner from "./components/QR/QRCodeScanner";
 import Dashboard from "./components/Dashboard/dashboard";
+import VerificationPage from "./components/Verify";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Scannow/>} />
       <Route path="/dashboard" element={<Dashboard/>} />
-      <Route path="/verify/:uid/:access_token" component={VerifyEmail} />
+      <Route path="/activate/:uid/:token" component={VerificationPage} />
 
       <Route path="/" element={<Layout />}>
         {/* public routes */}

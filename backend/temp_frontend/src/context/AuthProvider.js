@@ -17,8 +17,8 @@ const AuthProvider = ({ children }) => {
     }
   }, [authTokens.access_token]);
 
-  const login = (uid, access_token, refresh_token) => {
-    const tokens = { uid, access_token, refresh_token };
+  const login = (access_token, refresh_token) => {
+    const tokens = { access_token, refresh_token };
     setCookie('authTokens', JSON.stringify(tokens));
     setAuthTokens(tokens);
   };
