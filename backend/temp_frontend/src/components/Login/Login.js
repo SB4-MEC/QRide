@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useRef, useState, useEffect } from "react";
-import useAuth from "../../hooks/useAuth";
 import axios from "../../api/Axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import AuthContext from "../../context/AuthProvider";
 const LOGIN_URL = "/auth/jwt/create/";
 
 const Login = () => {
-  const { login } = useAuth();
+  const { setAuthTokens,setCookie } = useContext(AuthContext);
 
   const userRef = useRef();
   const errRef = useRef();
@@ -24,6 +24,12 @@ const Login = () => {
   useEffect(() => {
     setErrMsg("");
   }, [email, password]);
+
+  const login = (access_token, refresh_token) => {
+    const tokens = { access_token, refresh_token };
+    setCookie('authTokens', JSON.stringify(tokens));
+    setAuthTokens(tokens);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

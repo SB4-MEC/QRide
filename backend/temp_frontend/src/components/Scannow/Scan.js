@@ -6,7 +6,7 @@ const Scan = () => {
   const navigate = useNavigate();
 
   const navigateToQr = () => {
-    navigate("/Qr");
+    navigate("/QR");
   };
 
   return (

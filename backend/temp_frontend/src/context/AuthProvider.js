@@ -1,10 +1,10 @@
-import React, { useState, useEffect, createContext} from 'react';
-import { useCookies } from 'react-cookie';
+import React, { useState, useEffect, createContext } from "react";
+import { useCookies } from "react-cookie";
 
-export const AuthContext = createContext();
+const AuthContext = createContext({});
 
-const AuthProvider = ({ children }) => {
-  const [cookies, setCookie, removeCookie] = useCookies(['authTokens']);
+export const AuthProvider = ({ children }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(["authTokens"]);
   const storedTokens = cookies.authTokens || {};
   const [authTokens, setAuthTokens] = useState(storedTokens);
 
@@ -17,25 +17,19 @@ const AuthProvider = ({ children }) => {
     }
   }, [authTokens.access_token]);
 
-  const login = (access_token, refresh_token) => {
-    const tokens = { access_token, refresh_token };
-    setCookie('authTokens', JSON.stringify(tokens));
-    setAuthTokens(tokens);
-  };
-
-  const logout = () => {
-    removeCookie('authTokens');
-    setAuthTokens({});
-  };
-
   return (
-    <AuthContext.Provider value={{ loggedIn, auth: authTokens, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        loggedIn,
+        setAuthTokens,
+        setCookie,
+        removeCookie,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export default AuthProvider;
-
-
+export default AuthContext;
 
