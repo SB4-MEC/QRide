@@ -17,6 +17,11 @@ export const AuthProvider = ({ children }) => {
     }
   }, [authTokens.access_token]);
 
+  const handleLogout = () => {
+    removeCookie('authTokens');
+    setAuthTokens({});
+};
+
   return (
     <AuthContext.Provider
       value={{
@@ -24,6 +29,7 @@ export const AuthProvider = ({ children }) => {
         setAuthTokens,
         setCookie,
         removeCookie,
+        handleLogout,
       }}
     >
       {children}
