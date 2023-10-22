@@ -11,7 +11,7 @@ const Dashboard = () => {
         navigate('/');
     };
     const navigateToQr = () => {
-        navigate('/Qr');
+        navigate('/QR');
     };
     const navigateToFav = () => {
         navigate('/Fav');

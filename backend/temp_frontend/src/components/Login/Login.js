@@ -49,7 +49,7 @@ const Login = () => {
         // The login function should handle updating tokens in cookies and context state.
         login(access_token, refresh_token);
         setErrMsg("");
-        navigate("/QR");
+        navigate("/dashboard");
       } else {
         setErrMsg("Invalid email or password");
       }
