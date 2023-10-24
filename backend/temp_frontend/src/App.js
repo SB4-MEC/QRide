@@ -10,6 +10,7 @@ import Layout from "./components/Layout/Layout";
 import QRCodeScanner from "./components/QR/QRCodeScanner";
 import Dashboard from "./components/Dashboard/dashboard";
 import VerificationPage from "./components/Verify";
+import ResetPwd from "./components/ResetPwd/ResetPwd";
 
 function App() {
   return (
@@ -22,12 +23,16 @@ function App() {
         {/* public routes */}
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path='resetpassword' element={<ResetPwd/>}/>
       </Route>
 
       {/* we want to protect these routes */}
-      <Route element={<RequireAuth />}>
+      {/*<Route element={<RequireAuth />}>
         <Route path="/QR" element={<QRCodeScanner />} />
-      </Route>
+  </Route>*/}
+
+      <Route path="/QR" element={<QRCodeScanner />} />
+
 
       {/* catch all */}
       <Route path="*" element={<Missing />} />

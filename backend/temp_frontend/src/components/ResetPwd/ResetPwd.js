@@ -2,11 +2,9 @@ import React, { useContext } from "react";
 import { useRef, useState, useEffect } from "react";
 import axios from "../../api/Axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import AuthContext from "../../context/AuthProvider";
-const LOGIN_URL = "/auth/jwt/create/";
+const RESET_PASSWORD_URL = "/auth/users/reset_password/";
 
-const Login = () => {
-  const { setAuthTokens,setCookie,setLoggedIn } = useContext(AuthContext);
+const ResetPwd = () => {
 
   const userRef = useRef();
   const errRef = useRef();
@@ -14,8 +12,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [password, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [resetmailmsg, setResetmailmsg] = useState("");
 
   useEffect(() => {
     userRef.current.focus();
@@ -23,36 +21,26 @@ const Login = () => {
 
   useEffect(() => {
     setErrMsg("");
-  }, [email, password]);
-
-  const login = (access_token, refresh_token) => {
-    const tokens = { access_token, refresh_token };
-    setCookie('authTokens', JSON.stringify(tokens));
-    setAuthTokens(tokens);
-    setLoggedIn(true);
-  };
+  }, [email]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ email, password }), //Diff between javascript objects and json strings
+        RESET_PASSWORD_URL,
+        JSON.stringify({ email }), //Diff between javascript objects and json strings
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
       if (response.status === 200) {
-        const { access_token, refresh_token } = response.data;
-
-        // The login function should handle updating tokens in cookies and context state.
-        login(access_token, refresh_token);
-        setErrMsg("");
+        console.log("Reset password email sent");
+        setResetmailmsg("Reset password email sent");
         navigate("/QR");
       } else {
-        setErrMsg("Invalid email or password");
+        setErrMsg("Invalid email");
       }
     } catch (err) {
       if (!err?.response) {
@@ -98,30 +86,16 @@ const Login = () => {
             className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
           />
 
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter password"
-            onChange={(e) => setPwd(e.target.value)}
-            value={password}
-            required
-            className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
-          />
+        
 
-          <button className="flex text-xl font-medium bg-black text-white py-2 px-8 rounded-3xl items-center justify-center hover:bg-[#27272a]">
-            Login
+          <button onClick={resetmailmsg} className="flex text-xl font-medium bg-black text-white py-2 px-8 rounded-3xl items-center justify-center hover:bg-[#27272a]">
+            Submit
           </button>
         </form>
-        <p className="font-normal px-2 text-sm">
-          Need an Account?
-          <Link to="/register" className="text-blue-600 text-base ">
-            {" "}
-            Register
-          </Link>
-        </p>
+        
       </div>
     </>
   );
 };
 
-export default Login;
+export default ResetPwd;
