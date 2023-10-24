@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification Page</title>
+  <!-- Include Axios library from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <!-- Custom Styles -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #007bff;
+    }
+
+    #verification-message {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #verify-button {
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #verify-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Email Verification Page</h2>
+    <p id="verification-message"></p>
+    <button id="verify-button">Verify</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const verificationMessageElement = document.getElementById('verification-message');
+      const verifyButton = document.getElementById('verify-button');
+
+      verifyButton.addEventListener('click', async function () {
+        const { uid, token } = getParamsFromURL();
+        console.log('UID and Token:', uid, token);
+
+        const EMAIL_VERIFICATION_URL = 'http://localhost:8000/auth/users/activation/';
+
+        if (uid && token) {
+          try {
+            const accessToken = localStorage.getItem('access_token'); // Get access token from localStorage
+            console.log('Access Token:', accessToken); // Check if access token is present
+
+            const response = await axios.post(EMAIL_VERIFICATION_URL, {
+              uid: uid,
+              token: token
+            }, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              }
+            });
+
+            // The verification call was successful
+            console.log('Email verification successful.');
+            verificationMessageElement.textContent = 'Email verification successful.';
+            // Replace this line with the appropriate logic for navigation
+            navigate('/login');
+
+          } catch (error) {
+            // Handle any errors if necessary
+            console.error('Email verification failed:', error);
+            verificationMessageElement.textContent = 'Email verification failed.';
+          }
+        } else {
+          // Handle missing or invalid uid and token parameters
+          console.error('Invalid or missing uid and token parameters.');
+          verificationMessageElement.textContent = 'Invalid or missing verification parameters.';
+        }
+      });
+
+      function getParamsFromURL() {
+        const urlSegments = window.location.pathname.split('/');
+        const uid = urlSegments[urlSegments.length - 2]; // Extract uid from the second last segment
+        const token = urlSegments[urlSegments.length - 1]; // Extract token from the last segment
+        console.log('UID:', uid);
+        console.log('Token:', token);
+        return { uid, token };
+      }
+    });
+  </script>
+</body>
+
+</html>
