@@ -27,11 +27,11 @@ function App() {
       </Route>
 
       {/* we want to protect these routes */}
-      {/*<Route element={<RequireAuth />}>
+      <Route element={<RequireAuth />}>
         <Route path="/QR" element={<QRCodeScanner />} />
-  </Route>*/}
+  </Route>
 
-      <Route path="/QR" element={<QRCodeScanner />} />
+      {/* <Route path="/QR" element={<QRCodeScanner />} /> */}
 
 
       {/* catch all */}

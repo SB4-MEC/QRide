@@ -68,7 +68,7 @@ const ResetPwd = () => {
           {errMsg}
   </p>*/}
         <div className="flex justify-center items-center h-[10%] ">
-          <h1 className="font-semibold md:font-bold text-4xl ">Login</h1>
+          <h1 className="font-semibold md:font-bold text-4xl ">Reset Password</h1>
         </div>
         <form
           onSubmit={handleSubmit}

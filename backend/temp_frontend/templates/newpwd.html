@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <style>
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .md\:font-bold {
+            font-weight: 700;
+        }
+
+        .text-4xl {
+            font-size: 2.25rem;
+        }
+
+        .input-field {
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+            width: 100%;
+        }
+
+        .errmsg {
+            color: red;
+            margin-top: 1rem;
+        }
+
+        .offscreen {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            border: 0;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+        }
+
+        .submit-button {
+            background-color: #4caf50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flex flex-col w-full h-full justify-center items-center py-4 gap-2">
+        <h1 class="font-semibold md:font-bold text-4xl">Reset Password</h1>
+        <form onsubmit="handleSubmit(event)" class="flex items-center justify-center flex-col w-full gap-8">
+            <input type="password" id="newPassword" placeholder="Enter new password" autocomplete="off" required
+                class="input-field" />
+            <input type="password" id="retypeNewPassword" placeholder="Retype new password" autocomplete="off" required
+                class="input-field" />
+            <p id="errMsg" class="offscreen" aria-live="assertive"></p>
+            <button type="submit" class="submit-button">Reset Password</button>
+        </form>
+    </div>
+
+    <script>
+        const RESET_PASSWORD_URL = "http://localhost:8000/auth/users/reset_password_confirm/";
+
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            const newPassword = document.getElementById("newPassword").value;
+            const retypeNewPassword = document.getElementById("retypeNewPassword").value;
+            const errMsgElement = document.getElementById("errMsg");
+
+            if (newPassword !== retypeNewPassword) {
+                errMsgElement.textContent = "Passwords do not match";
+                errMsgElement.classList.add("errmsg");
+                return;
+            }
+
+            // Make API call to reset password
+            fetch(RESET_PASSWORD_URL, {
+                method: "POST",
+                body: JSON.stringify({ newPassword }),
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        console.log("Reset password successful");
+                        window.location.href = "/login"; // Redirect to login page after password reset
+                    } else {
+                        errMsgElement.textContent = "Invalid request";
+                        errMsgElement.classList.add("errmsg");
+                    }
+                })
+                .catch(error => {
+                    // Handle error responses here
+                    console.error(error);
+                });
+        }
+    </script>
+</body>
+
+</html>

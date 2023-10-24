@@ -108,7 +108,15 @@ const Login = () => {
             required
             className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
           />
-
+          {/* <p className="font-normal px-2 text-sm text-left" >Forgot Password?<Link to="/resetpassword">
+            {" "}
+          </Link></p> */}
+          <p className="font-normal px-2 text-sm">
+          <Link to="/resetpassword" className="text-black text-base ">
+            {" "}
+            Forgot Password?
+          </Link>
+        </p>
           <button className="flex text-xl font-medium bg-black text-white py-2 px-8 rounded-3xl items-center justify-center hover:bg-[#27272a]">
             Login
           </button>
