@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
     removeCookie('authTokens');
     setAuthTokens({});
     setLoggedIn(false);
+    console.log("Logged out");
     navigate('/login');
 };
 

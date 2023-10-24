@@ -30,6 +30,7 @@ const Login = () => {
     setCookie('authTokens', JSON.stringify(tokens));
     setAuthTokens(tokens);
     setLoggedIn(true);
+    console.log(setLoggedIn);
   };
 
   const handleSubmit = async (e) => {
