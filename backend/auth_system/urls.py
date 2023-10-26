@@ -6,6 +6,9 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.social.urls')),
 ]
+urlpatterns += [
+    re_path(r'^activate/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', TemplateView.as_view(template_name='verify.html'), name='activate'),   
+]
+urlpatterns += [re_path(r'^password/reset/confirm/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', TemplateView.as_view(template_name='newpwd.html'), name='activate'),
+]
 
-urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='newpwd.html'))]
-# urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='verify.html'))]
