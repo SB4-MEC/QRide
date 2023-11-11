@@ -12,12 +12,14 @@ export const AuthProvider = ({ children }) => {
   const navigate=useNavigate();
 
   const [loggedIn,setLoggedIn]=useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (loggedIn && !authTokens.access_token) {
       // Handle logout when the access token expires
       setAuthTokens({});
       setLoggedIn(false);
+      setUser(null);
     }
   }, [authTokens.access_token]);
 
@@ -25,6 +27,7 @@ export const AuthProvider = ({ children }) => {
     removeCookie('authTokens');
     setAuthTokens({});
     setLoggedIn(false);
+    setUser(null);
     console.log("Logged out");
     navigate('/login');
 };
@@ -34,6 +37,8 @@ export const AuthProvider = ({ children }) => {
       value={{
         loggedIn,
         setLoggedIn,
+        user,
+        setUser,
         setAuthTokens,
         setCookie,
         removeCookie,
