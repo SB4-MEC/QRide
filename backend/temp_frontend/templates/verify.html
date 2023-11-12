@@ -12,13 +12,14 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      background-color:#c9e9e1;
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
     }
 
     .container {
@@ -27,10 +28,34 @@
       padding: 20px;
       border-radius: 10px;
       text-align: center;
+      position: fixed;
+      scale: 1.5;
+    }
+  
+    
+    .qride {
+      font-size: 700px;
+      font-weight: bold;
+      color: rgb(0, 0, 0);
+      overflow: hidden;
+  
     }
 
+    .qride1{
+      font-size: 700px;
+      font-weight: bold;
+      color: rgb(0, 0, 0);
+      overflow: hidden;
+      overflow: hidden;
+    }
+
+    /* .column{
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    } */
     h2 {
-      color: #007bff;
+      color: #000000;
     }
 
     #verification-message {
@@ -39,7 +64,7 @@
     }
 
     #verify-button {
-      background-color: #007bff;
+      background-color: #000000;
       color: #ffffff;
       border: none;
       padding: 10px 20px;
@@ -49,17 +74,26 @@
     }
 
     #verify-button:hover {
-      background-color: #0056b3;
+      background-color: #353538;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h2>Email Verification Page</h2>
-    <p id="verification-message"></p>
-    <button id="verify-button">Verify</button>
+    <div class="column">
+    <div class="qride">
+      QRide
+    </div>
+    <div class="qride1">
+      QRide
+    </div>
   </div>
+    <div class="container">
+      <h2>Email Verification</h2>
+      <p id="verification-message"></p>
+      <button id="verify-button">Verify</button>
+    </div>
+  
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -106,8 +140,8 @@
 
       function getParamsFromURL() {
         const urlSegments = window.location.pathname.split('/');
-        const uid = urlSegments[urlSegments.length - 2]; // Extract uid from the second last segment
-        const token = urlSegments[urlSegments.length - 1]; // Extract token from the last segment
+        const uid = urlSegments[urlSegments.length - 3]; // Extract uid from the second last segment
+        const token = urlSegments[urlSegments.length - 2]; // Extract token from the last segment
         console.log('UID:', uid);
         console.log('Token:', token);
         return { uid, token };

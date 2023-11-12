@@ -10,7 +10,7 @@ const Scan = () => {
   };
 
   return (
-    <div className="bg-[#c9e9e1] min-h-screen flex flex-col items-center justify-around pl-0 pt-10">
+    <div className="bg-green-200 min-h-screen flex flex-col items-center justify-around pl-0 pt-10">
       <header className="w-full h-full flex items-center">
         <div className="flex items-center">
         <h1 className="text-black text-4xl font-bold mt-[-6rem] pt-10 pl-10">QRide</h1>

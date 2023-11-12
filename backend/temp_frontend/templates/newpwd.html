@@ -6,6 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password</title>
     <style>
+         body {
+      font-family: Arial, sans-serif;
+      background-color:#c9e9e1;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      background-color: #ffffff;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      position: fixed;
+      scale: 1.5;
+    }
+  
+    
+    .qride {
+      font-size: 700px;
+      font-weight: bold;
+      color: rgb(0, 0, 0);
+      overflow: hidden;
+  
+    }
+
+    .qride1{
+      font-size: 700px;
+      font-weight: bold;
+      color: rgb(0, 0, 0);
+      overflow: hidden;
+      overflow: hidden;
+    }
         .flex {
             display: flex;
         }
@@ -68,24 +106,33 @@
         }
 
         .submit-button {
-            background-color: #4caf50;
+            background-color: #000000;
             color: white;
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 0.25rem;
             cursor: pointer;
             font-size: 1rem;
+            width: 100%;
         }
 
         .submit-button:hover {
-            background-color: #45a049;
+            background-color: #6c706d;
         }
     </style>
 </head>
 
 <body>
-    <div class="flex flex-col w-full h-full justify-center items-center py-4 gap-2">
-        <h1 class="font-semibold md:font-bold text-4xl">Reset Password</h1>
+    <div class="column">
+        <div class="qride">
+          QRide
+        </div>
+        <div class="qride1">
+          QRide
+        </div>
+      </div>
+    <div class="container">
+        <h2>Reset Password</h1>
         <form onsubmit="handleSubmit(event)" class="flex items-center justify-center flex-col w-full gap-8">
             <input type="password" id="new_password" placeholder="Enter new password" autocomplete="off" required
                 class="input-field" />
@@ -94,6 +141,10 @@
             <p id="errMsg" class="offscreen" aria-live="assertive"></p>
             <button type="submit" class="submit-button">Reset Password</button>
         </form>
+    </div>
+    
+        
+        
     </div>
 
     <script>
@@ -140,8 +191,8 @@
 
         function getParamsFromURL() {
         const urlSegments = window.location.pathname.split('/');
-        const uid = urlSegments[urlSegments.length - 2]; // Extract uid from the second last segment
-        const token = urlSegments[urlSegments.length - 1]; // Extract token from the last segment
+        const uid = urlSegments[urlSegments.length - 3]; // Extract uid from the second last segment
+        const token = urlSegments[urlSegments.length - 2]; // Extract token from the last segment
         console.log('UID:', uid);
         console.log('Token:', token);
         return { uid, token };

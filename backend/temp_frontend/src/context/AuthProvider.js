@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (loggedIn && !authTokens.access_token) {
-      // Handle logout when the access token expires
       setAuthTokens({});
       setLoggedIn(false);
       setUser(null);

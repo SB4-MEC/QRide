@@ -52,7 +52,7 @@ const ResetPwd = () => {
       } else {
         setErrMsg("Login Failed");
       }
-      errRef.current.focus();
+      // errRef.current.focus();
       console.log(errMsg);
     }
   };

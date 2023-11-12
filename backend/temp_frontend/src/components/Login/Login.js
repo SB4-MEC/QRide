@@ -57,6 +57,7 @@ const Login = () => {
         setErrMsg("Invalid email or password");
       }
     } catch (err) {
+      window.alert('Please enter correct email and password');
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 400) {
@@ -66,7 +67,7 @@ const Login = () => {
       } else {
         setErrMsg("Login Failed");
       }
-      errRef.current.focus();
+      // errRef.current.focus();
       console.log(errMsg);
     }
   };
