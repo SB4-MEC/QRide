@@ -7,6 +7,7 @@ import scan_image from '../Assets/qrcode.png';
 import user_image from '../Assets/profile.png';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/AuthProvider'; // Provide the correct path to your AuthProvider.js file
+import bg_image from '../Assets/bg.png';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -36,6 +37,12 @@ const Dashboard = () => {
   
     return (
         <div className="bg-[#c9e9e1]">
+             {/* <div className='qride'>
+                QRide
+            </div> */}
+            <div className="bg-image">
+                <img src={bg_image} alt="Background" />
+            </div>
             <div className="row">    
                 <div className="container">
                     <div className="user-info" onMouseEnter={openUserModal} onMouseLeave={closeUserModal}>
@@ -119,6 +126,11 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
+            
+           
+            {/* <div className='qride1'>
+                QRide
+            </div> */}
         </div>
     );
 };
