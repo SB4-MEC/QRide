@@ -7,16 +7,20 @@ import Missing from "./components/Missing";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
+import Layout1 from "./components/Layout1/layout1";
 import QRCodeScanner from "./components/QR/QRCodeScanner";
 import Dashboard from "./components/Dashboard/dashboard";
 import VerificationPage from "./components/Verify";
 import ResetPwd from "./components/ResetPwd/ResetPwd";
+import Dashboardtest from "./components/Dasboardtest/dashboardtest";
+import Table from "./components/Table/table";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Scan />} />
       <Route path="/activate/:uid/:token" component={VerificationPage} />
+      <Route path="/table" element={<Table />} />
 
       <Route path="/" element={<Layout />}>
         {/* public routes */}
@@ -27,7 +31,8 @@ function App() {
 
       {/* we want to protect these routes */}
       <Route element={<RequireAuth />}>
-      <Route path="/dashboard" element={<Dashboard />} />
+      {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+      <Route path="/dashboardtest" element={<Dashboardtest />} />
 
         <Route path="/QR" element={<QRCodeScanner />} />
   </Route>

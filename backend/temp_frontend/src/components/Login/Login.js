@@ -52,7 +52,7 @@ const Login = () => {
         login(access_token, refresh_token);
         console.log('Access Token:', access_token);
         setErrMsg("");
-        navigate("/dashboard");
+        navigate("/dashboardtest");
       } else {
         setErrMsg("Invalid email or password");
       }
