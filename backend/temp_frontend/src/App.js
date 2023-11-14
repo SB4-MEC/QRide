@@ -19,9 +19,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Scan />} />
-      <Route path="/activate/:uid/:token" component={VerificationPage} />
+      <Route path="/activate/:uid/:token" element={<VerificationPage/>} />
       <Route path="/table" element={<Table />} />
-
+      
       <Route path="/" element={<Layout />}>
         {/* public routes */}
         <Route path="login" element={<Login />} />
