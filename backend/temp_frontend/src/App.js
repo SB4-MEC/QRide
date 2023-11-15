@@ -12,7 +12,6 @@ import QRCodeScanner from "./components/QR/QRCodeScanner";
 import Dashboard from "./components/Dashboard/dashboard";
 import VerificationPage from "./components/Verify";
 import ResetPwd from "./components/ResetPwd/ResetPwd";
-import Dashboardtest from "./components/Dasboardtest/dashboardtest";
 import Table from "./components/Table/table";
 
 function App() {
@@ -21,7 +20,9 @@ function App() {
       <Route path="/" element={<Scan />} />
       <Route path="/activate/:uid/:token" element={<VerificationPage/>} />
       <Route path="/table" element={<Table />} />
-      
+      <Route path="/QR" element={<QRCodeScanner />} />
+
+
       <Route path="/" element={<Layout />}>
         {/* public routes */}
         <Route path="login" element={<Login />} />
@@ -31,10 +32,8 @@ function App() {
 
       {/* we want to protect these routes */}
       <Route element={<RequireAuth />}>
-      {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-      <Route path="/dashboardtest" element={<Dashboardtest />} />
+      <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route path="/QR" element={<QRCodeScanner />} />
   </Route>
 
       {/* <Route path="/QR" element={<QRCodeScanner />} /> */}

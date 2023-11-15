@@ -7,7 +7,7 @@ const LOGIN_URL = "/auth/jwt/create/";
 
 const Login = () => {
   const { setAuthTokens,setCookie,setLoggedIn } = useContext(AuthContext);
-
+ 
   const userRef = useRef();
   const errRef = useRef();
 
@@ -52,7 +52,7 @@ const Login = () => {
         login(access_token, refresh_token);
         console.log('Access Token:', access_token);
         setErrMsg("");
-        navigate("/dashboardtest");
+        navigate("/dashboard");
       } else {
         setErrMsg("Invalid email or password");
       }
