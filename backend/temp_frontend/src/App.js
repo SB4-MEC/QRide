@@ -20,7 +20,6 @@ function App() {
       <Route path="/" element={<Scan />} />
       <Route path="/activate/:uid/:token" component={VerificationPage} />
       <Route path="/table" element={<Table />} />
-      <Route path="/QR" element={<QRCodeScanner />} />
 
 
       <Route path="/" element={<Layout />}>
@@ -33,6 +32,7 @@ function App() {
       {/* we want to protect these routes */}
       <Route element={<RequireAuth />}>
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/QR" element={<QRCodeScanner />} />
 
   </Route>
 

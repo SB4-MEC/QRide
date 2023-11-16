@@ -93,39 +93,39 @@ const QRCodeScanner = () => {
 
   return (
     <div className="background" style={backgroundStyle}>
-      {result ? (
-        // Display VerifyGif instead of video when QR is scanned
-        <div className="verify-container">
+      <div className="verify-container">
+        {result ? (
           <img src={VerifyGif} alt="Verify" className="verify-gif" />
-        </div>
-      ) : (
-        <div className="video-container">
-          <video className="video" ref={ref} />
-          <p>
-            <span className="qr-text">Scan your QR!</span>
-          </p>
-        </div>
-      )}
+        ) : (
+          <div className="video-container">
+            <video className="video" ref={ref} />
+            <p>
+              <span className="qr-text">Scan your QR!</span>
+            </p>
+          </div>
+        )}
 
-      {result && (
-        <div className="dropdown-container">
-          <button onClick={toggleDropdown} className="dropdown-button">
-            Select Destination
-          </button>
+        {result && (
+          <div className="dropdown-container">
+            <button onClick={toggleDropdown} className="dropdown-button">
+              Select Destination
+            </button>
 
-          {isDropdownOpen && (
-            <div className="dropdown-content">
-              {busStops.map((stop, index) => (
-                <a key={index} onClick={() => handleDestinationSelect(stop)}>
-                  {stop}
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+            {isDropdownOpen && (
+              <div className="dropdown-content">
+                {busStops.map((stop, index) => (
+                  <a key={index} onClick={() => handleDestinationSelect(stop)}>
+                    {stop}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
+
 
 export default QRCodeScanner;

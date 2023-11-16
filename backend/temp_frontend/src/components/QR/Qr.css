@@ -1,13 +1,21 @@
 /* Qr.css */
 
 .background {
-  /* display: flex; */
-  /* justify-content: center; */
-  /* align-items: center; */
+  /* ... (unchanged styles) */
   background-color: rgb(30, 29, 29);
-  /* background-image:url("https://www.clipartmax.com/png/middle/192-1921669_squiggly-lines-cliparts-dashed-lines-clipart-png.png");  */
-  /* background-image: 'url(${bgdot})';    background-size: cover; */
-  /* height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.verify-container {
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  margin: auto;
 }
 
 .video-container {
@@ -16,35 +24,36 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: auto;
 }
 
 .video {
   max-width: 100%;
   max-height: 100%;
-  /* border: 0.7ch solid black; */
   border-radius: 30px;
 }
-.qr-text{
+
+.qr-text {
   color: white;
-  font-family: 'Poppins', sans-serif;  
+  font-family: 'Poppins', sans-serif;
   font-size: 2rem;
 }
+
 /* Add additional styles as needed */
 
 @media screen and (max-width: 425px) {
-.video-container{
-height: 40vh;
-display:flex;
-flex-direction: row;
+  .verify-container,
+  .video-container {
+    height: 40vh;
+  }
+  .video-container {
+    flex-direction: row;
+  }
 }
-}    
-
 
 .dropdown-container {
-  position:absolute;
+  margin-top: -80px;
   display: inline-block;
-  right: 400px;
-  top:250px;
 }
 
 .dropdown-button {
@@ -65,9 +74,10 @@ flex-direction: row;
   background-color: #f9f9f9;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
-  width: 150px;
-  border-radius:20px;
   width: 400px;
+  border-radius: 20px;
+  max-height: 200px; /* Adjust this value as needed */
+  overflow-y: auto; /* Add scrollbar when content exceeds max-height */
 }
 
 .dropdown-content a {
@@ -80,18 +90,19 @@ flex-direction: row;
 
 .dropdown-content a:hover {
   background-color: #f1f1f1;
+  border-radius: 20px;
+
 }
 
-.verify-gif{
+.verify-gif {
   transform: scale(0.5);
   border-radius: 20px;
 }
 
-/* Add a CSS class for the animation */
 .verify-container.move-left {
-transition: transform 1s ease; /* You can adjust the duration and easing function */
+  transition: transform 1s ease;
 }
 
 .verify-gif {
-max-width: 100%; /* Ensure the image does not exceed its container */
+  max-width: 100%;
 }
