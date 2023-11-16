@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./Qr.css";
 import bgdot from "../Assets/bgdot.png";
 import bgdot1 from "../Assets/bgdot1.png";
+import VerifyGif from "../Assets/verify.gif"; // Import the verify.gif file
 
 const QRCodeScanner = () => {
   const navigate = useNavigate();
@@ -15,43 +16,41 @@ const QRCodeScanner = () => {
     "Pipeline",
     "NGO",
     "CUSAT",
-    // Add more bus stops as needed
   ]);
   const [selectedDestination, setSelectedDestination] = useState("");
 
   const toggleDropdown = () => {
+    // If a QR code has been scanned, do not toggle the dropdown
+    if (result) {
+      return;
+    }
+
     setDropdownOpen(!isDropdownOpen);
   };
 
   const handleDestinationSelect = (stop) => {
     setSelectedDestination(stop);
     setDropdownOpen(false);
-
-    // Now you can send the data to the backend or perform any other actions
-    // For example, call a function to fetch buses based on current location and selected destination
     fetchBuses(result, stop);
   };
 
   const fetchBuses = (currentLocation, selectedDestination) => {
-    // Make a request to the backend API with the necessary data
-    // Example using fetch API
-    fetch('/api/track-buses', {
-      method: 'POST',
+    fetch("/api/track-buses", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         currentLocation,
         selectedDestination,
       }),
     })
-      .then(response => response.json())
-      .then(data => {
-        // Handle the response from the backend
-        console.log('Buses:', data);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Buses:", data);
       })
-      .catch(error => {
-        console.error('Error fetching buses:', error);
+      .catch((error) => {
+        console.error("Error fetching buses:", error);
       });
   };
 
@@ -65,8 +64,8 @@ const QRCodeScanner = () => {
     backgroundSize: "cover",
     height: "100vh",
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
   };
 
@@ -76,10 +75,8 @@ const QRCodeScanner = () => {
       setResult(scannedText);
 
       if (isValidURL(scannedText)) {
-        // Handle other cases (non-URL, non-"Edappally") as needed
         alert(`Scanned: ${scannedText}. Please scan the correct QR code`);
       } else {
-        // If the scanned QR is correct, initiate the dropdown menu
         toggleDropdown();
       }
     },
@@ -96,11 +93,21 @@ const QRCodeScanner = () => {
 
   return (
     <div className="background" style={backgroundStyle}>
-      <div className="video-container">
-        <video className="video" ref={ref} />
-        <p>
-          <span className="qr-text">Scan your QR!</span>
-        </p>
+      {result ? (
+        // Display VerifyGif instead of video when QR is scanned
+        <div className="verify-container">
+          <img src={VerifyGif} alt="Verify" className="verify-gif" />
+        </div>
+      ) : (
+        <div className="video-container">
+          <video className="video" ref={ref} />
+          <p>
+            <span className="qr-text">Scan your QR!</span>
+          </p>
+        </div>
+      )}
+
+      {result && (
         <div className="dropdown-container">
           <button onClick={toggleDropdown} className="dropdown-button">
             Select Destination
@@ -116,7 +123,7 @@ const QRCodeScanner = () => {
             </div>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 };
