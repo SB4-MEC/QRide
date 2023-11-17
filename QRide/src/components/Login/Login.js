@@ -5,7 +5,7 @@ import AuthContext from "../../context/AuthProvider";
 import supabase from "../../config/supabaseClient";
 
 const Login = () => {
-  const { setAuthTokens,setCookie,setLoggedIn } = useContext(AuthContext);
+  const {user,session,signIn}=useContext(AuthContext);
  
   const userRef = useRef();
   const errRef = useRef();
@@ -29,7 +29,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      let { data, error } = await supabase.auth.signInWithPassword({
+      let { data, error } = await signIn({
         email,
         password
       })
@@ -39,6 +39,7 @@ const Login = () => {
       
       if(data){
         console.log("User logged in:", data);
+        console.log(session);
         navigate('/')
       }
     }

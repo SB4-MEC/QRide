@@ -3,7 +3,8 @@ import { useContext } from "react";
 import AuthContext from "../context/AuthProvider";
 
 const RequireAuth = () => {
-  const { user } = useContext(AuthContext);
+  const { user} = useContext(AuthContext);
+  
 
   if (!user) {
     // user is not authenticated
