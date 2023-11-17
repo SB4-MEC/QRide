@@ -1,3 +1,0 @@
-1. Use custom hooks for context api(Watch only 6 mins)
-   https://www.youtube.com/watch?v=I7dwJxGuGYQ
-
