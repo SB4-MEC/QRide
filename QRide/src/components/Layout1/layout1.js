@@ -13,7 +13,7 @@ import supabase from '../../config/supabaseClient';
 
 const Layout1 = ({ children }) => {
     const navigate = useNavigate();
-    const { handleLogout } = useContext(AuthContext);
+    // const { handleLogout } = useContext(AuthContext);
     const [userData, setUserData] = useState({ first_name: '', last_name: '', email: '' });
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   
@@ -39,19 +39,20 @@ const Layout1 = ({ children }) => {
   
       // Fetch email from another table (replace 'other_table' and 'email_column' with your actual table and column names)
       const fetchEmail = async () => {
-        
-          
         try {
+          // Wait for authentication to be ready
+          await supabase.auth.refreshSession();
+          
           const { data, error } = await supabase
-            .from('users') // Use 'users' instead of 'auth'
+            .from('users')
             .select('email')
-            .eq('id', supabase.auth.user.id) // Filter for the current user
+            .eq('id', supabase.auth.user.id)
             .single();
-      
+    
           if (error) {
             throw error;
           }
-      
+    
           const emailData = data;
           if (emailData) {
             setUserData((prevUserData) => ({ ...prevUserData, email: emailData.email }));
@@ -106,7 +107,7 @@ const Layout1 = ({ children }) => {
             <div className="user-modal" onMouseEnter={openUserModal} onMouseLeave={closeUserModal}>
               <p>{userData.first_name} {userData.last_name}</p>
               <p>{userData.email}</p>
-              <button onClick={handleLogout}>Logout</button>
+              <button onClick={() => supabase.auth.signOut()}>Logout</button>
             </div>
           )}
           {children}
