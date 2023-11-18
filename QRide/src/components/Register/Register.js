@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import supabase from "../../config/supabaseClient";
 
 const Register = () => {
+  const navigate = useNavigate(); // Change from useHistory to useNavigate
   const [userinput, setUserInput] = useState({
     first_name: "",
     last_name: "",
@@ -10,6 +11,7 @@ const Register = () => {
     password: "",
   });
   const [errMsg, setErrMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState(""); // New state for success message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,6 +64,12 @@ const Register = () => {
           userinput.first_name,
           userinput.last_name
         ); // Pass the user ID and name
+
+        // Show success message and redirect after a short delay
+        setSuccessMsg("User registered successfully!");
+        setTimeout(() => {
+          navigate("/login"); // Change from history.push to navigate
+        }, 2000);
       }
       return data;
     } catch (error) {
@@ -78,6 +86,13 @@ const Register = () => {
   return (
     <>
       <div className="flex flex-col w-full h-full justify-center items-center gap-4">
+        {/* Add the success message */}
+        {successMsg && (
+          <div className="bg-green-200 text-green-800 p-2 rounded-md">
+            {successMsg}
+          </div>
+        )}
+        {/* Remaining code unchanged */}
         <div className="flex justify-center items-center h-[10%]">
           <h1 className="font-semibold md:font-bold text-4xl">Register</h1>
         </div>
@@ -129,7 +144,6 @@ const Register = () => {
             required
             className="flex rounded-3xl h-[20%] w-[50%] text-start px-4 border-2"
           />
-
           <button
             className="flex text-xl font-medium bg-black text-white py-2 px-8 rounded-3xl items-center justify-center hover:bg-[#27272a]"
             type="submit"

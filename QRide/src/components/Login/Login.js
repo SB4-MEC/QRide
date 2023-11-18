@@ -40,7 +40,7 @@ const Login = () => {
       if(data){
         console.log("User logged in:", data);
         console.log(session);
-        navigate('/')
+        navigate('/dashboard')
       }
     }
     catch(error){
