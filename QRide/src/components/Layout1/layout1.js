@@ -21,6 +21,7 @@ const Layout1 = ({ children }) => {
   });
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   useEffect(() => {
+
   const fetchuser = async () => {
     try {
       const {
@@ -34,15 +35,33 @@ const Layout1 = ({ children }) => {
       if (user) {
         console.log(user);
         setUserData({
-          first_name: user.first_name,
-          last_name: user.last_name,
           email: user.email,
         });
+        const userId = user.id;
+        const { data:namedata, error:nameerror } = await supabase
+        .from("user_details")
+        .select("first_name, last_name")
+        .eq("user_id", userId);
+
+        if(nameerror){
+          throw nameerror;
+        }
+        if(namedata){
+          console.log(namedata);
+          setUserData(prevData => ({
+            ...prevData,
+            first_name: namedata[0].first_name,
+            last_name: namedata[0].last_name,
+          }));
+        }
       }
     } catch (error) {
       console.error("Error fetching email:", error.message);
     }
   };
+
+  
+
   fetchuser();
 
 }, []);
