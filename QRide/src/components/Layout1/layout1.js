@@ -111,8 +111,8 @@ const Layout1 = ({ children }) => {
               {userData.first_name} {userData.last_name}
             </p>
             <p>{userData.email}</p>
-            {/*<button onClick={handleLogout}>Logout</button>*/}
-          </div>
+            <button onClick={() => supabase.auth.signOut()}>Logout</button>        
+            </div>
         )}
         {children}
       </div>

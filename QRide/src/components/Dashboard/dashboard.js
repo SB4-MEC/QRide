@@ -75,7 +75,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <button onClick={fetch}>trial</button>
+      
     </Layout1>
   );
 };
