@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { useRef, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import AuthContext from "../../context/AuthProvider";
+import {AuthContext}from "../../context/AuthProvider";
 import supabase from "../../config/supabaseClient";
 
 const Login = () => {
-  const {user,session,signIn}=useContext(AuthContext);
+  const {user}=useContext(AuthContext);
  
   const userRef = useRef();
   const errRef = useRef();
@@ -29,7 +29,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      let { data, error } = await signIn({
+      let { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       })
@@ -39,7 +39,7 @@ const Login = () => {
       
       if(data){
         console.log("User logged in:", data);
-        console.log(session);
+       
         navigate('/')
       }
     }

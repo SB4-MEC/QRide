@@ -18,27 +18,23 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Scan />} />
-      <Route path="/activate/:uid/:token" element={<VerificationPage/>} />
+      <Route path="/activate/:uid/:token" element={<VerificationPage />} />
       <Route path="/table" element={<Table />} />
-      
-
 
       <Route path="/" element={<Layout />}>
         {/* public routes */}
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path='resetpassword' element={<ResetPwd/>}/>
+        <Route path="resetpassword" element={<ResetPwd />} />
       </Route>
 
       {/* we want to protect these routes */}
       <Route element={<RequireAuth />}>
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/QR" element={<QRCodeScanner />} />
-
-  </Route>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/QR" element={<QRCodeScanner />} />
+      </Route>
 
       {/* <Route path="/QR" element={<QRCodeScanner />} /> */}
-
 
       {/* catch all */}
       <Route path="*" element={<Missing />} />
