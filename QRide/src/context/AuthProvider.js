@@ -19,7 +19,8 @@ const AuthProvider = ({ children }) => {
           setUser(session.user);
           setAuth(true);
         }
-        if (event === "SIGNED_OUT") {
+        if (event === "SIGNED_OUT") 
+        {
           setUser(null);
           setAuth(false);
         }

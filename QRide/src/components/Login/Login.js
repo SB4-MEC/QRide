@@ -39,7 +39,7 @@ const Login = () => {
       
       if(data){
         console.log("User logged in:", data);
-       
+        
         navigate('/dashboard')
       }
     }
@@ -48,6 +48,8 @@ const Login = () => {
       return null;
     }
   };
+
+
 
   return (
     <>
