@@ -7,7 +7,6 @@ import Missing from "./components/Missing";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
-import Layout1 from "./components/Layout1/layout1";
 import QRCodeScanner from "./components/QR/QRCodeScanner";
 import Dashboard from "./components/Dashboard/dashboard";
 import VerificationPage from "./components/Verify";
@@ -19,7 +18,6 @@ function App() {
     <Routes>
       <Route path="/" element={<Scan />} />
       <Route path="/activate/:uid/:token" element={<VerificationPage />} />
-      <Route path="/table" element={<Table />} />
 
       <Route path="/" element={<Layout />}>
         {/* public routes */}
@@ -32,6 +30,8 @@ function App() {
       <Route element={<RequireAuth />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/QR" element={<QRCodeScanner />} />
+        <Route path="/table" element={<Table />} />
+
       </Route>
 
       {/* <Route path="/QR" element={<QRCodeScanner />} /> */}

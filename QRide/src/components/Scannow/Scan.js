@@ -1,15 +1,33 @@
 import React, { useEffect, useState } from "react";
 import bus1_image from "../Assets/bus1.png";
 import { useNavigate } from "react-router-dom";
+import user_image from "../Assets/profile.png";
+import supabase from "../../config/supabaseClient";
 
 const Scan = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   const navigateToQr = () => {
     navigate("/QR");
   };
 
+  const navigateToDashboard = () => {
+    navigate("/dashboard");
+  }
+  const openUserModal = () => {
+    setIsUserModalOpen(true);
+  };
+
+  const closeUserModal = () => {
+    setIsUserModalOpen(false);
+  };
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/login");
+  };
+  
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -30,11 +48,28 @@ const Scan = () => {
 
   return (
     <div className="bg-green-200 min-h-screen flex flex-col items-center justify-around pl-0">
-      <header className="w-full h-full flex items-center">
-        <div className="flex items-center">
-          <h1 className="text-black text-4xl font-bold pl-10">QRide</h1>
+    <header className="w-full h-full flex items-center">
+      <div className="header-content flex items-center">
+        <h1 className="text-black text-4xl font-bold pl-10">QRide</h1>
+        <div
+          className="user-info"
+          onMouseEnter={openUserModal}
+          onMouseLeave={closeUserModal}
+        >
+          <img src={user_image} alt="User" className="user-icon" />
         </div>
-      </header>
+        {isUserModalOpen && (
+          <div
+            className="user-modal"
+            onMouseEnter={openUserModal}
+            onMouseLeave={closeUserModal}
+          >
+            <p onClick={navigateToDashboard}>Dashboard</p>
+            <button onClick={handleLogout}>Logout</button>
+          </div>
+        )}
+      </div>
+    </header>
       <main className="flex flex-col items-center w-full">
         <div className="text text-center">
           <h2 className="text-4xl md:text-6xl font-bold ">Effortless Bus Travel</h2>

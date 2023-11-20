@@ -1,19 +1,16 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./layout1.css";
 import home_image from "../Assets/home.png";
 import heart_image from "../Assets/favourite.png";
 import scan_image from "../Assets/qrcode.png";
 import user_image from "../Assets/profile.png";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/AuthProvider";
 import bg_image from "../Assets/bg.png";
 import supabase from "../../config/supabaseClient";
 
-// ... (other imports)
 
 const Layout1 = ({ children }) => {
   const navigate = useNavigate();
-  //const { handleLogout } = useContext(AuthContext);
   const [userData, setUserData] = useState({
     first_name: "",
     last_name: "",
@@ -54,6 +51,22 @@ const Layout1 = ({ children }) => {
             last_name: namedata[0].last_name,
           }));
         }
+        // const { data: creditsData, error: creditsError } = await supabase
+        //   .from("credits")
+        //   .select("credits")
+        //   .eq("id", userId);
+
+        // if (creditsError) {
+        //   throw creditsError;
+        // }
+
+        // if (creditsData) {
+        //   // Assuming that there's only one row for the user in "creditdetails" table
+        //   setUserData((prevData) => ({
+        //     ...prevData,
+        //     credits: creditsData[0].credits,
+        //   }));
+        // }
       }
     } catch (error) {
       console.error("Error fetching email:", error.message);
@@ -130,6 +143,7 @@ const Layout1 = ({ children }) => {
               {userData.first_name} {userData.last_name}
             </p>
             <p>{userData.email}</p>
+            <p>Credits: {userData.credits}</p>
             <button onClick={() => supabase.auth.signOut()}>Logout</button>        
             </div>
         )}
