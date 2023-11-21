@@ -59,11 +59,17 @@ const Register = () => {
     }
   };
 
-  const createnewuser = async (email, password) => {
+  const createnewuser = async (email, password,first_name,last_name) => {
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            first_name: first_name,
+            last_name: last_name,
+          },
+        },
       });
 
       if (error) {
@@ -72,7 +78,7 @@ const Register = () => {
       if (data) {
         console.log("User registered:", data);
 
-        const {
+        {/*const {
           data: { user },
         } = await supabase.auth.getUser();
         // Update user profile with additional data
@@ -81,7 +87,8 @@ const Register = () => {
           userinput.first_name,
           userinput.last_name
         ); // Pass the user ID and name
-
+        */}
+        
         // Show success message and redirect after a short delay
         setSuccessMsg("User registered successfully!");
         setTimeout(() => {
@@ -97,7 +104,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    createnewuser(userinput.email, userinput.password);
+    createnewuser(userinput.email, userinput.password,userinput.first_name,userinput.last_name);
   };
 
   return (
