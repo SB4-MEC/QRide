@@ -88,12 +88,12 @@ const Register = () => {
           userinput.last_name
         ); // Pass the user ID and name
         */}
-        
+
         // Show success message and redirect after a short delay
-        setSuccessMsg("User registered successfully!");
-        setTimeout(() => {
+        setSuccessMsg("Confirm your mail!");
+        {/*setTimeout(() => {
           navigate("/login"); // Change from history.push to navigate
-        }, 2000);
+        }, 2000);*/}
       }
       return data;
     } catch (error) {
