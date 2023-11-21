@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { useRef, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import {AuthContext}from "../../context/AuthProvider";
+import {useAuth}from "../../context/AuthProvider";
 import supabase from "../../config/supabaseClient";
 
 const Login = () => {
-  const {user}=useContext(AuthContext);
+  const {session,signIn,signInWithGoogle}=useAuth();
  
   const userRef = useRef();
   const errRef = useRef();
@@ -24,7 +24,17 @@ const Login = () => {
     setErrMsg("");
   }, [email, password]);
 
-  
+  const loginsocial = async (provider) => {
+    try {
+      if (provider === 'google') {
+        await signInWithGoogle();
+      } else {
+        console.error(`Unsupported provider: ${provider}`);
+      }
+    } catch (error) {
+      console.error(`Error logging in with ${provider}:`, error.message);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,6 +112,9 @@ const Login = () => {
             Login
           </button>
         </form>
+        <button className="google-button" onClick={() => loginsocial('google')}>
+            Continue with Google
+          </button>
         <p className="font-normal px-2 text-sm">
           Need an Account?
           <Link to="/register" className="text-blue-600 text-base ">

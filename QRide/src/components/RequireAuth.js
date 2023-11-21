@@ -1,10 +1,8 @@
-import { useLocation, Navigate, Outlet,} from "react-router-dom";
-import { useContext } from "react";
-import {AuthContext} from "../context/AuthProvider";
+import { useLocation, Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 const RequireAuth = () => {
-  const { user} = useContext(AuthContext);
-  
+  const { user } = useAuth();
   const location = useLocation();
 
   return user ? (
@@ -15,6 +13,7 @@ const RequireAuth = () => {
 };
 
 export default RequireAuth;
+
 
 {
   /*This requireauth component is used to wrap the all the pages that we want to protect.

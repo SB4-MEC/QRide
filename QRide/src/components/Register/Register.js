@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {useAuth} from "../../context/AuthProvider";
 import supabase from "../../config/supabaseClient";
+import "./GoogleButtonStyle.css";
+
 
 const Register = () => {
-  const navigate = useNavigate(); // Change from useHistory to useNavigate
+  const { session, signIn, signInWithGoogle } = useAuth();
+  const navigate=useNavigate();
   const [userinput, setUserInput] = useState({
     first_name: "",
     last_name: "",
@@ -20,6 +24,19 @@ const Register = () => {
       [name]: value,
     }));
   };
+
+  const loginsocial = async (provider) => {
+    try {
+      if (provider === 'google') {
+        await signInWithGoogle();
+      } else {
+        console.error(`Unsupported provider: ${provider}`);
+      }
+    } catch (error) {
+      console.error(`Error logging in with ${provider}:`, error.message);
+    }
+  };
+
 
   const createUserDetails = async (userId, firstname, lastname) => {
     try {
@@ -149,6 +166,9 @@ const Register = () => {
             type="submit"
           >
             Register
+          </button>
+          <button className="google-button" onClick={() => loginsocial('google')}>
+            Continue with Google
           </button>
         </form>
         <p className="font-normal px-2 text-sm">

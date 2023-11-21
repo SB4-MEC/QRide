@@ -1,41 +1,48 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import supabase from "../config/supabaseClient";
 
-export const AuthContext = createContext({});
+const AuthContext = createContext({});
 
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [auth, setAuth] = useState(false);
-
-
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState();
+  const [session, setSession] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { data, error } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (error) {
-          console.log(error);
-        }
-        if (event === "SIGNED_IN") {
-          setUser(session.user);
-          setAuth(true);
-        }
-        if (event === "SIGNED_OUT") 
-        {
-          setUser(null);
-          setAuth(false);
-        }
-      }
-    );
+    const setData = async () => {
+      const { data: authData, error } = await supabase.auth.getSession();
+      if (error) throw error;
+
+      setSession(authData?.session);
+      setUser(authData?.user);
+      setLoading(false);
+    };
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, authSession) => {
+      setSession(authSession);
+      setUser(authSession?.user);
+      setLoading(false);
+    });
+
+    setData();
+
     return () => {
-      data.subscription.unsubscribe();
+      listener?.subscription.unsubscribe();
     };
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user}}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = {
+    session,
+    user,
+    signUp: (data) => supabase.auth.signUp(data),
+    signIn: (data) => supabase.auth.signInWithPassword(data),
+    signInWithGoogle: () => supabase.auth.signInWithOAuth({ provider: "google" }),
+    signOut: () => supabase.auth.signOut(),
+  };
+
+  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 };
 
-export default AuthProvider;
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
