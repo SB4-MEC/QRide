@@ -12,6 +12,7 @@ import supabase from "../../config/supabaseClient";
 const Layout1 = ({ children }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
+    name: "",
     first_name: "",
     last_name: "",
     email: "",
@@ -31,8 +32,10 @@ const Layout1 = ({ children }) => {
       }
       if (user) {
         console.log(user);
+        console.log(user.user_metadata.name)
         setUserData({
           email: user.email,
+          name: user.user_metadata.name,
         });
         const userId = user.id;
         const { data:namedata, error:nameerror } = await supabase
@@ -140,7 +143,7 @@ const Layout1 = ({ children }) => {
             onMouseLeave={closeUserModal}
           >
             <p>
-              {userData.first_name} {userData.last_name}
+              {userData.first_name} {userData.last_name}{userData.name}
             </p>
             <p>{userData.email}</p>
             <p>Credits: {userData.credits}</p>

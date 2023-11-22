@@ -39,7 +39,12 @@ const Register = () => {
       }
 
       if (user) {
-        console.log('Provider Metadata:', user.provider_metadata);
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        let metadata = user.user_metadata
+        
+        console.log('Provider Metadata:', metadata);
       }
   
         if (user) {
