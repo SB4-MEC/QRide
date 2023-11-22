@@ -17,6 +17,7 @@ const Register = () => {
   const [errMsg, setErrMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState(""); // New state for success message
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserInput((prevState) => ({
@@ -68,6 +69,7 @@ const Register = () => {
           data: {
             first_name: first_name,
             last_name: last_name,
+            credits:1000,
           },
         },
       });
