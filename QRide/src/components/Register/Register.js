@@ -38,28 +38,6 @@ const Register = () => {
     }
   };
 
-
-  const createUserDetails = async (userId, firstname, lastname) => {
-    try {
-      const { data, error } = await supabase.from("user_details").insert([
-        {
-          user_id: userId,
-          first_name: firstname,
-          last_name: lastname,
-          // Other profile data as needed
-        },
-      ]);
-
-      if (error) {
-        throw error;
-      }
-      return data;
-    } catch (error) {
-      console.error("Error creating user profile:", error.message);
-      return null;
-    }
-  };
-
   const createnewuser = async (email, password,first_name,last_name) => {
     try {
       const { data, error } = await supabase.auth.signUp({
