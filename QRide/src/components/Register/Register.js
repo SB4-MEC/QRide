@@ -29,7 +29,32 @@ const Register = () => {
   const loginsocial = async (provider) => {
     try {
       if (provider === 'google') {
-        await signInWithGoogle();
+        const { user, session, error } = await signInWithGoogle();
+  
+        console.log('User:', user);
+      console.log('Error:', error);
+
+      if (error) {
+        throw error;
+      }
+
+      if (user) {
+        console.log('Provider Metadata:', user.provider_metadata);
+      }
+  
+        if (user) {
+          // Extract first and last names from the provider_metadata
+          const { provider_metadata } = user;
+          const first_name = provider_metadata?.full_name?.split(' ')[0] || '';
+          const last_name = provider_metadata?.full_name?.split(' ')[1] || '';
+  
+          setUserInput((prevState) => ({
+            ...prevState,
+            first_name: first_name,
+            last_name: last_name,
+            email: user.email,
+          }));
+        }
       } else {
         console.error(`Unsupported provider: ${provider}`);
       }
@@ -37,6 +62,7 @@ const Register = () => {
       console.error(`Error logging in with ${provider}:`, error.message);
     }
   };
+  
 
   const createnewuser = async (email, password,first_name,last_name) => {
     try {
