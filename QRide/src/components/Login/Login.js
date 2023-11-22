@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {useAuth}from "../../context/AuthProvider";
 import supabase from "../../config/supabaseClient";
+import google_button from "../Assets/google.png";
 
 const Login = () => {
   const {session,signIn,signInWithGoogle}=useAuth();
@@ -113,7 +114,8 @@ const Login = () => {
           </button>
         </form>
         <button className="google-button" onClick={() => loginsocial('google')}>
-            Continue with Google
+          <img src={google_button} alt="Google" className="google-icon" />
+            <p>&nbsp;Continue with Google</p>
           </button>
         <p className="font-normal px-2 text-sm">
           Need an Account?
