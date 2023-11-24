@@ -18,6 +18,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Scan />} />
       <Route path="/activate/:uid/:token" element={<VerificationPage />} />
+      <Route path="/table" element={<Table />} />
+
 
       <Route path="/" element={<Layout />}>
         {/* public routes */}
@@ -30,7 +32,6 @@ function App() {
       <Route element={<RequireAuth />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/QR" element={<QRCodeScanner />} />
-        <Route path="/table" element={<Table />} />
 
       </Route>
 

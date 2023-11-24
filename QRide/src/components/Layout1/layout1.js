@@ -150,7 +150,9 @@ const Layout1 = ({ children }) => {
             <button onClick={() => supabase.auth.signOut()}>Logout</button>        
             </div>
         )}
+        <div className="right-container" style={{ margin: 'auto',marginTop: '150px'}}>
         {children}
+        </div>
       </div>
     </div>
   );
