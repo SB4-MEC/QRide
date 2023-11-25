@@ -1,4 +1,6 @@
 .container{
+    position: fixed;
+    top:0px;
     background-color:white;
     width: 7rem;
     margin-top: 0%;
@@ -99,4 +101,22 @@
     width: 100%;
     height: 100%;
     object-fit: cover; 
+  }
+
+
+
+  @media screen and (max-width: 425px) {
+    .container{
+      position:fixed;
+      max-height: 100vh;
+      width: 4rem; 
+    }
+    .right-container{
+      margin-left: 5rem !important;
+      overflow-y: auto;
+      max-height: calc(100vh - 92px);
+    }
+    .user-info{
+      right:60px;
+    }
   }

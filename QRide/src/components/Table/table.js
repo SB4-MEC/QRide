@@ -26,11 +26,11 @@ const Table = () => {
 
   return (
     <Layout1>
-      <div className="flex flex-col justify-center mt-[200]">
-      {/* Map through buses and render BusCard for each */}
-      {buses.map((bus) => (
-        <BusCard key={bus.bus_id} bus={bus} />
-      ))}
+      <div className="flex flex-col justify-center m-auto mt-[200]">
+        {/* Map through buses and render BusCard for each */}
+        {buses.map((bus) => (
+          <BusCard key={bus.bus_id} bus={bus} className="bus-card w-full"/>
+        ))}
       </div>
     </Layout1>
   );
