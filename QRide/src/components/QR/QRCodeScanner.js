@@ -8,8 +8,8 @@ import Verify from "../Assets/verify.gif";
 import supabase from "../../config/supabaseClient";
 const busStopTextCodes = {
   edapally: "EDAPPALLY",
-  thrikkakara: "Thrikkakara",
-  pipeline: "Pipeline",
+  thrikkakara: "THRIKKAKARA",
+  pipeline: "PIPELINE",
   ngo: "NGO",
   cusat: "CUSAT",
   // Add more text codes and their corresponding destinations
@@ -28,6 +28,7 @@ const QRCodeScanner = () => {
     // Add more bus stops as needed
   ]);
   const [selectedDestination, setSelectedDestination] = useState("");
+  const [currentLocation, setCurrentLocation] = useState("");
   const [bus, setBuses] = useState([{}]);
 
   const toggleDropdown = () => {
@@ -43,26 +44,24 @@ const QRCodeScanner = () => {
   const handleDestinationSelect = (stop) => {
     setSelectedDestination(stop);
     setDropdownOpen(false);
-
-    // Now you can send the data to the backend or perform any other actions
-    // For example, call a function to fetch buses based on current location and selected destination
-    fetchBuses(result, stop);
+    // fetchBuses(result, stop);
+    navigate("/table");
   };
 
-  const fetchBuses = async (currentLocation, selectedDestination) => {
-    try{
-      const { data, error } = await supabase
-      .from('busdetail')
-      .select('*')
-      if(data){
-        console.log("Buses:",data)
-      }
-    }
-    catch(error){
-     console.log("Not able to fetch")
-    }
+  // const fetchBuses = async (currentLocation, selectedDestination) => {
+  //   try{
+  //     const { data, error } = await supabase
+  //     .from('busdetail')
+  //     .select('*')
+  //     if(data){
+  //       console.log("Buses:",data)
+  //     }
+  //   }
+  //   catch(error){
+  //    console.log("Not able to fetch")
+  //   }
     
-  };
+  // };
 
   let backgroundImageUrl = `url(${bgdot})`;
   if (window.innerWidth <= 425) {
@@ -88,6 +87,7 @@ const QRCodeScanner = () => {
         // Handle other cases (non-URL, non-"Edappally") as needed
         alert(`Please scan the correct QR code`);
       } else {
+        setCurrentLocation(busStopTextCodes[scannedText.toLowerCase()]);
         // If the scanned QR is correct, initiate the dropdown menu
         toggleDropdown();
       }
@@ -126,7 +126,7 @@ const QRCodeScanner = () => {
             {isDropdownOpen && (
               <div className="dropdown-content">
                 {busStops.map((stop, index) => (
-                  <a key={index} onClick={() => handleDestinationSelect(stop)}>
+                  <a key={index} onClick={() => {handleDestinationSelect(stop);setSelectedDestination(stop)}}>
                     {stop}
                   </a>
                 ))}

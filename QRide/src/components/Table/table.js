@@ -4,13 +4,16 @@ import Layout1 from '../Layout1/layout1';
 import supabase from '../../config/supabaseClient';
 import BusCard from '../BusCard'; // Import the BusCard component
 
-const Table = () => {
+const Table = ({ startStopId, endStopId }) => {
   const [buses, setBuses] = useState([]);
 
   useEffect(() => {
     const fetchBuses = async () => {
       try {
-        const { data, error } = await supabase.from('busdetail').select('*');
+        const startId = getStopId(startStopId);
+        const endId = getStopId(endStopId);
+        const { data, error } = await supabase.from('busdetail').select('*').filter('start_stop_id', 'eq' ,startId).filter('end_stop_id', 'eq' ,endId
+        );
         if (data) {
           setBuses(data);
         } else {
@@ -20,9 +23,10 @@ const Table = () => {
         console.error('Error fetching buses:', error);
       }
     };
-
+    if (startStopId && endStopId) {
     fetchBuses();
-  }, []);
+    }
+  }, [startStopId, endStopId]);
 
   return (
     <Layout1>
@@ -36,4 +40,14 @@ const Table = () => {
   );
 };
 
+function getStopId(stopName) {
+  const stopIdMap = {
+    edapally: 1,
+    thrikkakara: 5,
+    pipeline: 2,
+    ngo: 4,
+    cusat: 3,
+  };
+  return stopIdMap[stopName];
+}
 export default Table;

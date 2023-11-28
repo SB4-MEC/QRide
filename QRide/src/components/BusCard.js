@@ -3,7 +3,7 @@ import React from 'react';
 
 const BusCard = ({ bus }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 mb-4 w-[1250px] fle flex-col items-center justify-center">
+    <div className="bg-white shadow-md rounded-lg p-4 mb-4 w-[80rem] fle flex-col items-center justify-center">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <span className="text-sm text-gray-500">Bus ID: {bus.bus_id}</span>
@@ -35,7 +35,7 @@ const BusCard = ({ bus }) => {
           <span className="text-sm text-gray-500"> Seats available</span>
           <span className="text-sm text-gray-500"> single</span>
         </div>
-        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+        <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
           BOOK NOW
         </button>
       </div>
