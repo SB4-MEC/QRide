@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {useAuth} from "../../context/AuthProvider";
 import supabase from "../../config/supabaseClient";
 import "./GoogleButtonStyle.css";
+import google_button from "../Assets/google.png";
 
 
 const Register = () => {
@@ -186,7 +187,8 @@ const Register = () => {
             Register
           </button>
           <button className="google-button" onClick={() => loginsocial('google')}>
-            Continue with Google
+          <img src={google_button} alt="Google" className="google-icon" />
+            &nbsp;Continue with Google
           </button>
         </form>
         <p className="font-normal px-2 text-sm">

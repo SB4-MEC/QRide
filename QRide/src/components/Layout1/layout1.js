@@ -107,14 +107,15 @@ const Layout1 = ({ children }) => {
         <img src={bg_image} alt="Background" />
       </div>
       <div className="row">
-        <div className="container">
-          <div
+      <div
             className="user-info"
             onMouseEnter={openUserModal}
             onMouseLeave={closeUserModal}
           >
             <img src={user_image} alt="User" className="user-icon" />
           </div>
+        <div className="container">
+
           <div className="icons">
             <img
               src={home_image}
@@ -150,7 +151,9 @@ const Layout1 = ({ children }) => {
             <button onClick={() => supabase.auth.signOut()}>Logout</button>        
             </div>
         )}
+        <div className="right-container" style={{ margin: 'auto',marginTop: '8rem',marginLeft:'auto',marginRight:'auto'}}>
         {children}
+        </div>
       </div>
     </div>
   );

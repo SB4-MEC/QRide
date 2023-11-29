@@ -1,15 +1,19 @@
+// Table.js
 import React, { useEffect, useState } from 'react';
 import Layout1 from '../Layout1/layout1';
 import supabase from '../../config/supabaseClient';
+import BusCard from '../BusCard'; // Import the BusCard component
 
-const Table = () => {
+const Table = ({ startStopId, endStopId }) => {
   const [buses, setBuses] = useState([]);
 
   useEffect(() => {
-    // Fetch data when the component mounts
     const fetchBuses = async () => {
       try {
-        const { data, error } = await supabase.from('busdetail').select('*');
+        const startId = getStopId(startStopId);
+        const endId = getStopId(endStopId);
+        const { data, error } = await supabase.from('busdetail').select('*').filter('start_stop_id', 'eq' ,startId).filter('end_stop_id', 'eq' ,endId
+        );
         if (data) {
           setBuses(data);
         } else {
@@ -19,61 +23,31 @@ const Table = () => {
         console.error('Error fetching buses:', error);
       }
     };
-
+    if (startStopId && endStopId) {
     fetchBuses();
-  }, []); // Empty dependency array ensures this effect runs once when the component mounts
-
-  const tableStyle = {
-    width: '80rem',
-    borderCollapse: 'collapse',
-    marginTop: '20px',
-    margin: 'auto',
-  };
-
-  const headerStyle = {
-    backgroundColor: 'black',
-    color: '#ffffff',
-    
-  };
-
-  const cellStyle = {
-    padding: '12px',
-    textAlign: 'left',
-    borderBottom: '1px solid #dddddd',
-  };
-
-  const hoverStyle = {
-    backgroundColor: '#f5f5f5',
-  };
+    }
+  }, [startStopId, endStopId]);
 
   return (
     <Layout1>
-     
-      <table style={tableStyle}>
-        <thead style={headerStyle}>
-          <tr>
-            <th style={cellStyle}>Bus ID</th>
-            <th style={cellStyle}>Bus Name</th>
-            <th style={cellStyle}>Start Stop ID</th>
-            <th style={cellStyle}>End Stop ID</th>
-            <th style={cellStyle}>Timing</th>
-          </tr>
-        </thead>
-        <tbody>
-          {buses.map((bus) => (
-            <tr key={bus.bus_id} style={hoverStyle}>
-              <td style={cellStyle}>{bus.bus_id}</td>
-              <td style={cellStyle}>{bus.bus_name}</td>
-              <td style={cellStyle}>{bus.start_stop_id}</td>
-              <td style={cellStyle}>{bus.end_stop_id}</td>
-              <td style={cellStyle}>{bus.timing}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      
+      <div className="flex flex-col justify-center m-auto mt-[200]">
+        {/* Map through buses and render BusCard for each */}
+        {buses.map((bus) => (
+          <BusCard key={bus.bus_id} bus={bus} className="bus-card w-full"/>
+        ))}
+      </div>
     </Layout1>
   );
 };
 
+function getStopId(stopName) {
+  const stopIdMap = {
+    edapally: 1,
+    thrikkakara: 5,
+    pipeline: 2,
+    ngo: 4,
+    cusat: 3,
+  };
+  return stopIdMap[stopName];
+}
 export default Table;

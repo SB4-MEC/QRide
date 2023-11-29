@@ -12,12 +12,16 @@ import Dashboard from "./components/Dashboard/dashboard";
 import VerificationPage from "./components/Verify";
 import ResetPwd from "./components/ResetPwd/ResetPwd";
 import Table from "./components/Table/table";
+import Booking from "./components/Booking/booking";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Scan />} />
       <Route path="/activate/:uid/:token" element={<VerificationPage />} />
+      <Route path="/table" element={<Table />} />
+      <Route path="/booking" element={<Booking />} />
+
 
       <Route path="/" element={<Layout />}>
         {/* public routes */}
@@ -30,7 +34,6 @@ function App() {
       <Route element={<RequireAuth />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/QR" element={<QRCodeScanner />} />
-        <Route path="/table" element={<Table />} />
 
       </Route>
 
