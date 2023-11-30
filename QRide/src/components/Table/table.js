@@ -1,18 +1,42 @@
 // Table.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
+import { useLocation } from 'react-router-dom';
 import Layout1 from '../Layout1/layout1';
 import supabase from '../../config/supabaseClient';
 import BusCard from '../BusCard'; // Import the BusCard component
 
-const Table = ({ startStopId, endStopId }) => {
+const Table = () => {
   const [buses, setBuses] = useState([]);
+  const location = useLocation();
+  const { startStop, endStop} = location.state;
+  let returnData;
+
+  const getStopIdFromQRCode = async (scannedText) => {
+    const { data, error } = await supabase
+      .from('qrcode')
+      .select('bus_stop_id')
+      .eq('code', scannedText);
+  
+    if (error) {
+      console.error('Error fetching stop ID from QR code: ', error);
+      return null;
+    }
+    if(data){
+      returnData = data?.[0]?.bus_stop_id;
+      return returnData;
+    }
+    
+
+  };
 
   useEffect(() => {
     const fetchBuses = async () => {
       try {
-        const startId = getStopId(startStopId);
-        const endId = getStopId(endStopId);
-        const { data, error } = await supabase.from('busdetail').select('*').filter('start_stop_id', 'eq' ,startId).filter('end_stop_id', 'eq' ,endId
+        const startId = startStop;
+        const endId = endStop;
+        console.log(startStop);
+        console.log(endStop);
+        const { data, error } = await supabase.from('busdetail').select('*').filter('start_stop_id', 'eq' ,startStop).filter('end_stop_id', 'eq' ,endStop
         );
         if (data) {
           setBuses(data);
@@ -23,10 +47,10 @@ const Table = ({ startStopId, endStopId }) => {
         console.error('Error fetching buses:', error);
       }
     };
-    if (startStopId && endStopId) {
+    
     fetchBuses();
-    }
-  }, [startStopId, endStopId]);
+    
+  }, []);
 
   return (
     <Layout1>
