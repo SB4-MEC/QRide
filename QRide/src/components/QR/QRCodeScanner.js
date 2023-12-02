@@ -5,7 +5,7 @@ import "./Qr.css";
 import bgdot from "../Assets/bgdot.png";
 import bgdot1 from "../Assets/bgdot1.png";
 import Verify from "../Assets/verify.gif";
-import supabase from "../../config/supabaseClient";
+// import supabase from "../../config/supabaseClient";
 const busStopTextCodes = {
   edapally: "EDAPPALLY",
   thrikkakara: "THRIKKAKARA",
