@@ -69,7 +69,7 @@ const Table = () => {
 
     fetchBuses();
     
-  }, [startStop, endStop]);
+  }, [currentLocation, selectedDestination]);
 
   return (
     <Layout1>
