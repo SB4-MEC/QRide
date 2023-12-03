@@ -29,25 +29,6 @@ const Table = () => {
       return null;
     }
   };
-
-// const getEndId = async (stopName) => {
-//     const { data, error } = await supabase
-//       .from('busstop')
-//       .select('stop_id')
-//       .eq('stop_name', stopName);
-
-//     if (error) {
-//       console.error(`Error fetching stop ID for ${stopName}: `, error);
-//       return null;
-//     }
-
-//     if (data && data.length > 0) {
-//       return data[0].stop_id;
-//     } else {
-//       console.warn(`No stop ID found for ${stopName}`);
-//       return null;
-//     }
-//   };
   
   useEffect(() => {
     const fetchBuses = async () => {
@@ -73,6 +54,33 @@ const Table = () => {
     fetchBuses();
     
   }, [startStop, endStop]);
+
+
+// const getListOfBuses = async (startStopId, endStopId) => {
+//   const { data, error } = await supabase
+//     .from('busdetail')
+//     .select(`
+//       bus_id,
+//       bus_name,
+//       timing,
+//       bus_route (
+//         id,
+//         busroutes
+//       ),
+//       start_stop:busstop (stop_name),
+//       end_stop:busstop (stop_name)
+//     `)
+//     .contains('bus_route:busroutes', [startStopId])
+//     .contains('bus_route:busroutes', [endStopId]);
+
+//   if (error) {
+//     console.error('Error retrieving list of buses: ', error);
+//     return [];
+//   }
+
+//   // Filter or sort your data as needed here
+//   return data;
+// };
 
   return (
     <Layout1>

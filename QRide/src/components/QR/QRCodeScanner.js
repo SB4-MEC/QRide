@@ -144,31 +144,5 @@ export default QRCodeScanner;
 
 
 
-// const getListOfBuses = async (startStopId, endStopId) => {
-//   const { data, error } = await supabase
-//     .from('busdetail')
-//     .select(`
-//       bus_id,
-//       bus_name,
-//       timing,
-//       bus_route (
-//         id,
-//         busroutes
-//       ),
-//       start_stop:busstop (stop_name),
-//       end_stop:busstop (stop_name)
-//     `)
-//     .contains('bus_route:busroutes', [startStopId])
-//     .contains('bus_route:busroutes', [endStopId]);
-
-//   if (error) {
-//     console.error('Error retrieving list of buses: ', error);
-//     return [];
-//   }
-
-//   // Filter or sort your data as needed here
-//   return data;
-// };
-
 
 
