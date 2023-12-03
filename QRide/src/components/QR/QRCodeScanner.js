@@ -5,6 +5,7 @@ import "./Qr.css";
 import bgdot from "../Assets/bgdot.png";
 import bgdot1 from "../Assets/bgdot1.png";
 import Verify from "../Assets/verify.gif";
+import { useBus } from "../../context/BusProvider";
 // import supabase from "../../config/supabaseClient";
 const busStopTextCodes = {
   edapally: "EDAPPALLY",
@@ -16,6 +17,12 @@ const busStopTextCodes = {
 };
 
 const QRCodeScanner = () => {
+  const {
+    selectedDestination,
+    setSelectedDestination,
+    currentLocation,
+    setCurrentLocation,
+  } = useBus();
   const navigate = useNavigate();
   const [result, setResult] = useState("");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -27,9 +34,6 @@ const QRCodeScanner = () => {
     "CUSAT",
     // Add more bus stops as needed
   ]);
-  const [selectedDestination, setSelectedDestination] = useState("");
-  const [currentLocation, setCurrentLocation] = useState("");
-  const [bus, setBuses] = useState([{}]);
 
   const toggleDropdown = () => {
     // If a QR code has been scanned, do not toggle the dropdown
@@ -40,27 +44,18 @@ const QRCodeScanner = () => {
     setDropdownOpen(!isDropdownOpen);
   };
 
-  
-
   const handleDestinationSelect = (stop) => {
     setSelectedDestination(stop);
+    console.log(selectedDestination);
     setDropdownOpen(false);
   };
- // Add this useEffect hook in your component
-useEffect(() => {
-  if (selectedDestination) {
-    // console.log(currentLocation);
-    // console.log(selectedDestination);
-    // fetchBuses(result, stop);
-    navigate("/table", {
-      state: {
-        startStop: currentLocation,
-        endStop: selectedDestination
-      }
-    });
-  }
-}, [selectedDestination]); // Dependency array
-  
+  // Add this useEffect hook in your component
+  useEffect(() => {
+    if (selectedDestination) {
+      navigate("/table");
+    }
+  }, [selectedDestination]); // Dependency array
+
   let backgroundImageUrl = `url(${bgdot})`;
   if (window.innerWidth <= 425) {
     backgroundImageUrl = `url(${bgdot1})`;
@@ -86,7 +81,8 @@ useEffect(() => {
         alert(`Please scan the correct QR code`);
       } else {
         setCurrentLocation(busStopTextCodes[scannedText.toLowerCase()]);
-        
+        console.log(currentLocation);
+
         // If the scanned QR is correct, initiate the dropdown menu
         toggleDropdown();
       }
@@ -104,45 +100,44 @@ useEffect(() => {
 
   return (
     <div className="background" style={backgroundStyle}>
-         {result?(
-        
-          <img src={Verify} alt="Verify" className="verify-gif" />
-        ):(
-          <div className="video-container">
-            <video className="video" ref={ref} />
-            <p>
-              <span className="qr-text">Scan your QR!</span>
-            </p>
-          </div>
-        )}
+      {result ? (
+        <img src={Verify} alt="Verify" className="verify-gif" />
+      ) : (
+        <div className="video-container">
+          <video className="video" ref={ref} />
+          <p>
+            <span className="qr-text">Scan your QR!</span>
+          </p>
+        </div>
+      )}
 
-        {result && (
-          <div className="dropdown-container">
-            <button onClick={toggleDropdown} className="dropdown-button">
-              Select Destination
-            </button>
+      {result && (
+        <div className="dropdown-container">
+          <button onClick={toggleDropdown} className="dropdown-button">
+            Select Destination
+          </button>
 
-            {isDropdownOpen && (
-              <div className="dropdown-content">
-                {busStops.map((stop, index) => (
-                  <a key={index} onClick={() => {handleDestinationSelect(stop)}}>
-                    {stop}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    
+          {isDropdownOpen && (
+            <div className="dropdown-content">
+              {busStops.map((stop, index) => (
+                <a
+                  key={index}
+                  onClick={() => {
+                    handleDestinationSelect(stop);
+                  }}
+                >
+                  {stop}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
-
 export default QRCodeScanner;
-
-
-
 
 // const getListOfBuses = async (startStopId, endStopId) => {
 //   const { data, error } = await supabase
@@ -169,6 +164,3 @@ export default QRCodeScanner;
 //   // Filter or sort your data as needed here
 //   return data;
 // };
-
-
-
