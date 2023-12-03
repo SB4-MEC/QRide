@@ -14,6 +14,7 @@ import ResetPwd from "./components/ResetPwd/ResetPwd";
 import Table from "./components/Table/table";
 import Booking from "./components/Booking/booking";
 
+
 function App() {
   return (
     <Routes>
@@ -21,7 +22,7 @@ function App() {
       <Route path="/activate/:uid/:token" element={<VerificationPage />} />
       <Route path="/table" element={<Table />} />
       <Route path="/booking" element={<Booking />} />
-
+      
 
       <Route path="/" element={<Layout />}>
         {/* public routes */}
