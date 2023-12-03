@@ -164,3 +164,9 @@ export default QRCodeScanner;
 //   // Filter or sort your data as needed here
 //   return data;
 // };
+
+
+
+
+
+
