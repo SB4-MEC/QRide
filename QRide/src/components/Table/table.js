@@ -1,17 +1,63 @@
 // Table.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
+import { useLocation } from 'react-router-dom';
 import Layout1 from '../Layout1/layout1';
 import supabase from '../../config/supabaseClient';
 import BusCard from '../BusCard'; // Import the BusCard component
 
-const Table = ({ startStopId, endStopId }) => {
+const Table = () => {
   const [buses, setBuses] = useState([]);
+  const location = useLocation();
+  const { startStop, endStop} = location.state;
+  // let returnData;
 
+  const getId = async (stopName) => {
+    const { data, error } = await supabase
+      .from('busstop')
+      .select('stop_id')
+      .eq('stop_name', stopName);
+
+    if (error) {
+      console.error(`Error fetching stop ID for ${stopName}: `, error);
+      return null;
+    }
+
+    if (data && data.length > 0) {
+      return data[0].stop_id;
+    } else {
+      console.warn(`No stop ID found for ${stopName}`);
+      return null;
+    }
+  };
+
+// const getEndId = async (stopName) => {
+//     const { data, error } = await supabase
+//       .from('busstop')
+//       .select('stop_id')
+//       .eq('stop_name', stopName);
+
+//     if (error) {
+//       console.error(`Error fetching stop ID for ${stopName}: `, error);
+//       return null;
+//     }
+
+//     if (data && data.length > 0) {
+//       return data[0].stop_id;
+//     } else {
+//       console.warn(`No stop ID found for ${stopName}`);
+//       return null;
+//     }
+//   };
+  
   useEffect(() => {
     const fetchBuses = async () => {
       try {
-        const startId = getStopId(startStopId);
-        const endId = getStopId(endStopId);
+        // const startId = startStop;
+        // const endId = endStop;
+        const startId = await getId(startStop);
+        const endId = await getId(endStop);
+        console.log(startId);
+        console.log(endId);
         const { data, error } = await supabase.from('busdetail').select('*').filter('start_stop_id', 'eq' ,startId).filter('end_stop_id', 'eq' ,endId
         );
         if (data) {
@@ -23,10 +69,10 @@ const Table = ({ startStopId, endStopId }) => {
         console.error('Error fetching buses:', error);
       }
     };
-    if (startStopId && endStopId) {
+    
     fetchBuses();
-    }
-  }, [startStopId, endStopId]);
+    
+  }, [startStop, endStop]);
 
   return (
     <Layout1>
@@ -40,14 +86,4 @@ const Table = ({ startStopId, endStopId }) => {
   );
 };
 
-function getStopId(stopName) {
-  const stopIdMap = {
-    edapally: 1,
-    thrikkakara: 5,
-    pipeline: 2,
-    ngo: 4,
-    cusat: 3,
-  };
-  return stopIdMap[stopName];
-}
 export default Table;

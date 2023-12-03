@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useZxing } from "react-zxing";
 import { useNavigate } from "react-router-dom";
 import "./Qr.css";
 import bgdot from "../Assets/bgdot.png";
 import bgdot1 from "../Assets/bgdot1.png";
 import Verify from "../Assets/verify.gif";
-import supabase from "../../config/supabaseClient";
+// import supabase from "../../config/supabaseClient";
 const busStopTextCodes = {
   edapally: "EDAPPALLY",
   thrikkakara: "THRIKKAKARA",
@@ -40,29 +40,27 @@ const QRCodeScanner = () => {
     setDropdownOpen(!isDropdownOpen);
   };
 
+  
 
   const handleDestinationSelect = (stop) => {
     setSelectedDestination(stop);
     setDropdownOpen(false);
-    // fetchBuses(result, stop);
-    navigate("/table");
   };
-
-  // const fetchBuses = async (currentLocation, selectedDestination) => {
-  //   try{
-  //     const { data, error } = await supabase
-  //     .from('busdetail')
-  //     .select('*')
-  //     if(data){
-  //       console.log("Buses:",data)
-  //     }
-  //   }
-  //   catch(error){
-  //    console.log("Not able to fetch")
-  //   }
-    
-  // };
-
+ // Add this useEffect hook in your component
+useEffect(() => {
+  if (selectedDestination) {
+    // console.log(currentLocation);
+    // console.log(selectedDestination);
+    // fetchBuses(result, stop);
+    navigate("/table", {
+      state: {
+        startStop: currentLocation,
+        endStop: selectedDestination
+      }
+    });
+  }
+}, [selectedDestination]); // Dependency array
+  
   let backgroundImageUrl = `url(${bgdot})`;
   if (window.innerWidth <= 425) {
     backgroundImageUrl = `url(${bgdot1})`;
@@ -88,6 +86,7 @@ const QRCodeScanner = () => {
         alert(`Please scan the correct QR code`);
       } else {
         setCurrentLocation(busStopTextCodes[scannedText.toLowerCase()]);
+        
         // If the scanned QR is correct, initiate the dropdown menu
         toggleDropdown();
       }
@@ -126,7 +125,7 @@ const QRCodeScanner = () => {
             {isDropdownOpen && (
               <div className="dropdown-content">
                 {busStops.map((stop, index) => (
-                  <a key={index} onClick={() => {handleDestinationSelect(stop);setSelectedDestination(stop)}}>
+                  <a key={index} onClick={() => {handleDestinationSelect(stop)}}>
                     {stop}
                   </a>
                 ))}
@@ -139,4 +138,37 @@ const QRCodeScanner = () => {
   );
 };
 
+
 export default QRCodeScanner;
+
+
+
+
+// const getListOfBuses = async (startStopId, endStopId) => {
+//   const { data, error } = await supabase
+//     .from('busdetail')
+//     .select(`
+//       bus_id,
+//       bus_name,
+//       timing,
+//       bus_route (
+//         id,
+//         busroutes
+//       ),
+//       start_stop:busstop (stop_name),
+//       end_stop:busstop (stop_name)
+//     `)
+//     .contains('bus_route:busroutes', [startStopId])
+//     .contains('bus_route:busroutes', [endStopId]);
+
+//   if (error) {
+//     console.error('Error retrieving list of buses: ', error);
+//     return [];
+//   }
+
+//   // Filter or sort your data as needed here
+//   return data;
+// };
+
+
+
