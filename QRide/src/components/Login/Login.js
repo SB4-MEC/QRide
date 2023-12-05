@@ -12,6 +12,8 @@ const Login = () => {
   const errRef = useRef();
 
   const navigate = useNavigate();
+  const [successMsg, setSuccessMsg] = useState(""); // New state for success message
+
 
   const [email, setEmail] = useState("");
   const [password, setPwd] = useState("");
@@ -55,6 +57,7 @@ const Login = () => {
       }
     }
     catch(error){
+      setSuccessMsg("Invalid Credentials");
       console.error("Error logging in user:", error.message);
       return null;
     }
@@ -72,6 +75,11 @@ const Login = () => {
         >
           {errMsg}
   </p>*/}
+  {successMsg && (
+          <div className="bg-red-200 text-red-800 p-2 rounded-md">
+            {successMsg}
+          </div>
+        )}
         <div className="flex justify-center items-center h-[10%] ">
           <h1 className="font-semibold md:font-bold text-4xl ">Login</h1>
         </div>

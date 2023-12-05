@@ -6,7 +6,7 @@ import bgdot from "../Assets/bgdot.png";
 import bgdot1 from "../Assets/bgdot1.png";
 import Verify from "../Assets/verify.gif";
 import { useBus } from "../../context/BusProvider";
-// import supabase from "../../config/supabaseClient";
+import supabase from "../../config/supabaseClient";
 const busStopTextCodes = {
   edapally: "EDAPPALLY",
   thrikkakara: "THRIKKAKARA",
@@ -60,7 +60,21 @@ const QRCodeScanner = () => {
   if (window.innerWidth <= 425) {
     backgroundImageUrl = `url(${bgdot1})`;
   }
+  useEffect(() => {
+    // Fetch bus stops on component mount
+    const fetchBusStops = async () => {
+      let { data: busstops, error } = await supabase.from('busstop').select('stop_name');
+      if (error) {
+        console.error("Error retrieving bus stop data: ", error);
+      } else {
+        const sortedBusStops = busstops.sort((a, b) => a.stop_name.localeCompare(b.stop_name));
+        const stopNames = sortedBusStops.map((busstop) => busstop.stop_name);
+        setBusStops(stopNames);
+      }
+    };
 
+    fetchBusStops();
+  }, []);
   const backgroundStyle = {
     backgroundImage: backgroundImageUrl,
     backgroundSize: "cover",

@@ -97,6 +97,7 @@
 .verify-gif {
   transform: scale(0.5);
   border-radius: 20px;
+  margin-top: -10rem;
 }
 
 .verify-container.move-left {

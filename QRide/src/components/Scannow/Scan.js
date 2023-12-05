@@ -64,7 +64,7 @@ const Scan = () => {
             onMouseEnter={openUserModal}
             onMouseLeave={closeUserModal}
           >
-            <p onClick={navigateToDashboard}>Dashboard</p>
+            <p onClick={navigateToDashboard} className="cursor-pointer">Dashboard</p>
             <button onClick={handleLogout}>Logout</button>
           </div>
         )}

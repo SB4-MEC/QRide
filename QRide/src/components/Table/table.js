@@ -61,9 +61,11 @@ const Table = () => {
           }
         } else {
           console.error("Error fetching buses:", error);
+          setBuses([]); 
         }
       } catch (error) {
         console.error("Error fetching buses:", error);
+        
       }
     };
 
@@ -71,13 +73,29 @@ const Table = () => {
     
   }, [currentLocation, selectedDestination]);
 
+  
   return (
     <Layout1>
       <div className="flex flex-col justify-center m-auto mt-[200]">
-        {/* Map through buses and render BusCard for each */}
-        {buses.map((bus) => (
-          <BusCard key={bus.bus_id} bus={bus} className="bus-card w-full" />
-        ))}
+        {/* Check if there are any buses to display */}
+        {buses.length > 0 ? (
+          // If buses exist, map through them and render BusCard for each
+          buses.map((bus) => (
+            <BusCard 
+              key={bus.bus_id} 
+              bus={bus} 
+              currentLocation={currentLocation} 
+              selectedDestination={selectedDestination} 
+              className="bus-card w-full" 
+            />
+          ))
+        ) : (
+          // If no buses are found, render a message instead
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong className="font-bold">No buses found!</strong>
+            <span className="block sm:inline"> We couldn't find any buses for your route.</span>
+          </div>
+        )}
       </div>
     </Layout1>
   );

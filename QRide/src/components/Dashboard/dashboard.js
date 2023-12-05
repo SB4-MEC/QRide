@@ -9,7 +9,7 @@ const Dashboard = () => {
         <div className="ag-courses_box">
           <div className="ag-courses_item">
             <a
-              href="http://localhost:3000/table"
+              // href="http://localhost:3000/table"
               className="ag-courses-item_link"
             >
               <div className="ag-courses-item_bg"></div>
@@ -19,7 +19,7 @@ const Dashboard = () => {
 
           <div className="ag-courses_item">
             <a
-              href="http://localhost:3000/table"
+              // href="http://localhost:3000/table"
               className="ag-courses-item_link"
             >
               <div className="ag-courses-item_bg"></div>
@@ -31,7 +31,7 @@ const Dashboard = () => {
 
           <div className="ag-courses_item">
             <a
-              href="http://localhost:3000/table"
+              // href="http://localhost:3000/table"
               className="ag-courses-item_link"
             >
               <div className="ag-courses-item_bg"></div>
@@ -42,7 +42,7 @@ const Dashboard = () => {
 
           <div className="ag-courses_item">
             <a
-              href="http://localhost:3000/table"
+              // href="http://localhost:3000/table"
               className="ag-courses-item_link"
             >
               <div className="ag-courses-item_bg"></div>
@@ -54,7 +54,7 @@ const Dashboard = () => {
 
           <div className="ag-courses_item">
             <a
-              href="http://localhost:3000/table"
+              // href="http://localhost:3000/table"
               className="ag-courses-item_link"
             >
               <div className="ag-courses-item_bg"></div>
@@ -64,7 +64,7 @@ const Dashboard = () => {
 
           <div className="ag-courses_item">
             <a
-              href="http://localhost:3000/table"
+              // href="http://localhost:3000/table"
               className="ag-courses-item_link"
             >
               <div className="ag-courses-item_bg"></div>
