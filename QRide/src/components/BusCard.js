@@ -29,7 +29,7 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
             </span> */}
             {/* <span className="text-sm text-gray-500">Fare</span> */}
           </div>
-          <div className="text-green-600 font-bold text-xl">{bus.price}/KM</div>
+          <div className="text-green-600 font-bold text-xl">₹{bus.price}/KM</div>
         </div>
         <div className="flex flex-col items-end">
           <span className="text-sm text-gray-500">45 Seats</span>
