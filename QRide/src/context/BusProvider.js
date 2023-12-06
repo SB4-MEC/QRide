@@ -6,6 +6,7 @@ export const BusProvider = ({ children }) => {
   const [buses, setBuses] = useState([{}]);
   const [selectedDestination, setSelectedDestination] = useState("");
   const [currentLocation, setCurrentLocation] = useState("");
+  const [currentBusIds, setCurrentBusIds] = useState([]);
 
   const value = {
     buses,
@@ -14,6 +15,8 @@ export const BusProvider = ({ children }) => {
     setSelectedDestination,
     currentLocation,
     setCurrentLocation,
+    currentBusIds,
+    setCurrentBusIds,
   };
 
   return <BusContext.Provider value={value}>{children}</BusContext.Provider>;

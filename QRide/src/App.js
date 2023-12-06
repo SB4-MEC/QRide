@@ -14,7 +14,7 @@ import ResetPwd from "./components/ResetPwd/ResetPwd";
 import Table from "./components/Table/table";
 import Booking from "./components/Booking/booking";
 import Map from "./components/Map/Map";
-
+import Favourites from "./components/Favourite/favourite";
 function App() {
   return (
     <Routes>
@@ -23,6 +23,7 @@ function App() {
       <Route path="/table" element={<Table />} />
       <Route path="/booking" element={<Booking />} />
       <Route path="/map" element={<Map />} />
+      <Route path="/fav" element={<Favourites />} />
 
       <Route path="/" element={<Layout />}>
         {/* public routes */}

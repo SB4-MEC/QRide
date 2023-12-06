@@ -4,12 +4,14 @@ import heart_1 from "./Assets/Heart.png";
 import heart_3 from "./Assets/heart3.png";
 import { useState, useEffect } from "react";
 import supabase from "../config/supabaseClient";
+import { useBus } from "../context/BusProvider";
 
 const BusCard = ({ bus, currentLocation, selectedDestination}) => {
   const [timeDifference, setTimeDifference] = useState("");
   const [whiteHeartVisible, setWhiteHeartVisible] = useState(true);
   const [redHeartVisible, setRedHeartVisible] = useState(false);
   const [busId, setBus_id] = useState();
+  const {currentBusIds, setCurrentBusIds} = useBus();
   //console.log(bus.bus_id)
 
 
@@ -22,6 +24,7 @@ const BusCard = ({ bus, currentLocation, selectedDestination}) => {
     console.log(busId);
     const currentBusId = busId;
     addFavourite(currentBusId);
+    setCurrentBusIds(prevData => [...prevData, currentBusId]);
 
         
     
