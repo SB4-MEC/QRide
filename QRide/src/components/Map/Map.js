@@ -3,8 +3,8 @@ import "leaflet/dist/leaflet.css";
 import React from "react";
 import "./Map.css";
 
-const DEFAULT_LATITUDE = -20.057329;
-const DEFAULT_LONGITUDE = 146.256973;
+const DEFAULT_LATITUDE = 10.0261;
+const DEFAULT_LONGITUDE = 76.3125;
 
 const Map = () => {
     {/*const markers = [

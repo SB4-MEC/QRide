@@ -1,6 +1,6 @@
 // BusCard.js
 import React from "react";
-import heart_1 from "./Assets/Heart.png";
+import heart_1 from "./Assets/heart.png";
 import heart_3 from "./Assets/heart3.png";
 import { useState, useEffect } from "react";
 import supabase from "../config/supabaseClient";
@@ -58,19 +58,26 @@ const BusCard = ({ bus, currentLocation, selectedDestination}) => {
     busTime.setHours(parseInt(busTimeSplit[0], 10));
     busTime.setMinutes(parseInt(busTimeSplit[1], 10));
     busTime.setSeconds(parseInt(busTimeSplit[2], 10));
-
+  
     const differenceInMillis = busTime.getTime() - systemTime.getTime();
-    const hoursDifference = Math.floor(differenceInMillis / (1000 * 60 * 60));
-    const minutesDifference = Math.floor(
-      (differenceInMillis % (1000 * 60 * 60)) / (1000 * 60)
-    );
-
-    const formattedTimeDifference = `${
-      hoursDifference >= 10 ? hoursDifference : "0" + hoursDifference
-    }:${minutesDifference >= 10 ? minutesDifference : "0" + minutesDifference}`;
-
-    setTimeDifference(formattedTimeDifference);
+  
+    if (differenceInMillis < 0) {
+      // Bus has already left
+      setTimeDifference(`bus left at ${busTime.toLocaleTimeString()}`);
+        } else {
+      const hoursDifference = Math.floor(differenceInMillis / (1000 * 60 * 60));
+      const minutesDifference = Math.floor(
+        (differenceInMillis % (1000 * 60 * 60)) / (1000 * 60)
+      );
+  
+      const formattedTimeDifference = `${
+        hoursDifference >= 10 ? hoursDifference : "0" + hoursDifference
+      }:${minutesDifference >= 10 ? minutesDifference : "0" + minutesDifference}`;
+  
+      setTimeDifference(formattedTimeDifference);
+    }
   }, []);
+  
   return (
     <div className="bg-white shadow-md rounded-lg p-4 mb-4 w-[80rem] fle flex-col items-center justify-center">
       <div className="flex justify-between items-center">
