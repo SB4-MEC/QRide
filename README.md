@@ -1,5 +1,9 @@
 ## QRide
 
+Live Link
+
+https://qrbus.tech/
+
 The project aims to revolutionize the public transportation experience through the development of a comprehensive web
 application “QR-Code Enabled Bus Stop Information System".The system leverages QR code technology at bus stops, allowing commuters to access information about bus timings,
 arrivals, destinations, and fare estimates simply by scanning QR
