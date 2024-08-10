@@ -1,81 +1,47 @@
 import React from "react";
 import Layout1 from "../Layout1/layout1";
-import "./dashboard.css";
+import { useNavigate } from "react-router";
+import "./dashboard.css"; // Ensure this is correctly linked
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  
+  const navigateToQr = () => {
+    navigate("/qr");
+  };
+
+  const navigateToMap = () => {
+    navigate("/map");
+  };
+
+  const navigateToHistory = () => {
+    navigate("/history");
+  };
+  
   return (
     <Layout1>
-      <div className="ag-format-container">
-        <div className="ag-courses_box">
-          <div className="ag-courses_item">
-            <a
-              // href="http://localhost:3000/table"
-              className="ag-courses-item_link"
-            >
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">Aluva - Vytilla</div>
-            </a>
+      <div className="dashboard-container">
+        <div className="large-grid" onClick={navigateToQr}>
+          <div className="grid-link">
+            <div className="icon-grid scan-icon"></div>
+            <div className="grid-title">Scan Now</div>
           </div>
-
-          <div className="ag-courses_item">
-            <a
-              // href="http://localhost:3000/table"
-              className="ag-courses-item_link"
-            >
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">
-                Thrippunithura - Thoppumpady
-              </div>
-            </a>
+        </div>
+        <div className="small-grids">
+          <div className="small-grid" onClick={navigateToMap}>
+            <div className="grid-link">
+              <div className="icon-grid map-icon"></div>
+              <div className="grid-title">Map</div>
+            </div>
           </div>
-
-          <div className="ag-courses_item">
-            <a
-              // href="http://localhost:3000/table"
-              className="ag-courses-item_link"
-            >
-              <div className="ag-courses-item_bg"></div>
-
-              <div className="ag-courses-item_title">Angamaly - Vytilla</div>
-            </a>
-          </div>
-
-          <div className="ag-courses_item">
-            <a
-              // href="http://localhost:3000/table"
-              className="ag-courses-item_link"
-            >
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">
-                Fort Kochi - Pookkattupady
-              </div>
-            </a>
-          </div>
-
-          <div className="ag-courses_item">
-            <a
-              // href="http://localhost:3000/table"
-              className="ag-courses-item_link"
-            >
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">Aluva - Infopark</div>
-            </a>
-          </div>
-
-          <div className="ag-courses_item">
-            <a
-              // href="http://localhost:3000/table"
-              className="ag-courses-item_link"
-            >
-              <div className="ag-courses-item_bg"></div>
-              <div className="ag-courses-item_title">
-                Willington island - Infopark
-              </div>
-            </a>
+          <div className="small-grid" onClick={navigateToHistory}>
+            <div className="grid-link">
+              <div className="icon-grid history-icon "></div>
+              <div className="grid-title">History</div>
+            </div>
           </div>
         </div>
       </div>
-      
     </Layout1>
   );
 };

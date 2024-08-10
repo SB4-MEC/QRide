@@ -2,3 +2,28 @@
 .leaflet-container {
     height: 100vh;
   }
+  .marker-wrapper {
+    position: relative;
+  }
+  
+  .blue-marker-img {
+    width: 25px; /* Adjust size as needed */
+    height: 41px; /* Adjust size as needed */
+    animation: pulse-animation 1.5s infinite; /* Keeping the pulse animation on the marker itself */
+  }
+  
+  @keyframes pulse-animation {
+    0% {
+      transform: scale(0.9);
+      opacity: 0.7;
+    }
+    70% {
+      transform: scale(1);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+  }
+  

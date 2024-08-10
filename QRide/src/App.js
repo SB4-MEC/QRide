@@ -15,6 +15,7 @@ import Table from "./components/Table/table";
 import Booking from "./components/Booking/booking";
 import Map from "./components/Map/Map";
 import Favourites from "./components/Favourite/favourite";
+import Notification from "./components/NotificationBar/Notifications"
 function App() {
   return (
     <Routes>
@@ -36,6 +37,7 @@ function App() {
       <Route element={<RequireAuth />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/QR" element={<QRCodeScanner />} />
+        <Route path="/notify" element={<Notification />} />
 
       </Route>
 

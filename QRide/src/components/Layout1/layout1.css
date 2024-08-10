@@ -1,133 +1,205 @@
-.container{
-    position: fixed;
-    top:0px;
-    background-color:white;
-    width: 7rem;
-    margin-top: 0%;
-    /* min-height: 100vh; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-top-right-radius: 40px;
-    border-bottom-right-radius: 40px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    z-index: 1000;
-    margin-left: 0%;
-    left: 0%;
-    height: 100vh;
-}
-.title{
-    visibility: hidden;
+/* layout1.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+.container {
+  position: fixed;
+  top: 0px;
+  background-color: white;
+  width: 9rem;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  left: 0;
+  height: 100vh;
+  transition: width 0.3s;
 }
 
-.icon{
-    width: 8rem;
-    padding: 15px;
-    margin-bottom: 5rem;
+.container.expanded {
+  width: 15rem;
+}
 
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 5rem;
+  cursor: pointer;
 }
-.icon:hover{
-    cursor: pointer;
+
+.icon {
+  width: 3rem;
+  height: auto;
 }
+
+.notification-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #f39c12;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-family: 'Poppins', sans-serif;
+  z-index: 1000;
+  transition: top 0.3s;
+}
+
+.icon-label {
+  visibility: hidden;
+  font-family: 'Poppins', sans-serif;
+  font-size: 25px;
+  color: #333;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.container.expanded .icon-label {
+  visibility: visible;
+}
+
 .row {
-    display: flex;
-    /* justify-content: center; */
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  height: 100%;
 }
-
 
 .user-info {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.user-icon {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  margin-right: 15px;
+  margin-top: 15px;
+}
+
+/* Added CSS for user-modal */
+.user-modal {
+  position: absolute;
+  top: 42px;
+  right: -300px; /* Initial position off-screen */
+  width: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: right 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0;
+}
+
+.user-modal.visible {
+  right: 25px; /* Final position when visible */
+  opacity: 1;
+}
+
+.user-modal p {
+  margin: 5px 0;
+  margin-bottom: 15px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #333;
+}
+
+.user-modal button {
+  background-color: #686665;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.user-modal button:hover {
+  background-color: #575251;
+}
+
+.bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dim-background {
+  transition: background-color 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.5); /* Adjust as necessary */
+}
+
+.bg-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.right-container {
+  width: calc(100% - 7rem);
+  padding: 1rem;
+  overflow-y: auto;
+  margin-left: 7rem;
+  transition: margin-left 0.3s, width 0.3s;
+}
+
+.container.expanded ~ .right-container {
+  margin-left: 15rem;
+  width: calc(100% - 15rem);
+}
+
+@media screen and (max-width: 425px) {
+  .container {
     position: fixed;
-    top: 10px; 
-    right: 10px; 
+    bottom: 0px;
+    max-height: 2rem;
+    width: 100%;
     display: flex;
-    align-items: center;
-    cursor: pointer;
+    flex-direction: row;
+    height:auto;
+    top:auto;
+    border-top-left-radius:40px;
+    border-bottom-right-radius:0;
+    border-bottom-left-radius:40px;
   }
   
-  .user-icon {
-    width: 4rem; 
-    height: 4rem; 
-    border-radius: 50%;
-    margin-right: 15px;
-    margin-top: 15px;
-  }
-  .user-modal {
-    position: fixed;
-    top: 92px; 
-    right: 25px;
-    width: auto;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-  }
-  
-  .user-modal p {
-    margin: 5px 0;
-    margin-bottom: 15px;
-    
-  }
-  
-  .user-modal button {
-    background-color: #686665;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .user-modal button:hover {
-    background-color: #575251;
+  .icon-wrapper {
+    flex-direction: column;
+    margin-bottom: 0;
   }
 
-
-  .row{
-    position :relative;
+  .icon {
+    width: 2rem;
   }
 
-  .bg-image {
-    position: fixed;
-    top: 0;
-    left: 0;
+  .icon-label {
+    font-size: 0.75rem;
+    margin-left: 0;
+    text-align:center;
+  }
+
+  .right-container {
     width: 100%;
-    height: 100%;
-   
-  }
-  
-  .bg-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
+    margin-left: 0;
+    margin-top: 2rem;
   }
 
-
-
-  @media screen and (max-width: 425px) {
-    .container{
-      position:fixed;
-      bottom: 0px;
-      max-height: 2rem;
-      width: 100%;
-      display: flex;
-      flex-direction: row; 
-    }
-    .right-container{
-      margin-left: 5rem !important;
-      overflow-y: auto;
-      max-height: calc(100vh - 92px);
-    }
-    .user-info{
-      right:60px;
-    }
-    .icon{
-      display: flex;
-      flex-direction: row;
-    }
+  .user-info {
+    right: 60px;
   }
-
-
-  
+}

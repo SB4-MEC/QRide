@@ -6,12 +6,14 @@ import reportWebVitals from "./reportWebVitals";
 import  {AuthProvider}  from "./context/AuthProvider";
 import { BusProvider } from "./context/BusProvider";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AuthListener from "./components/AuthListener";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthProvider>
       <BusProvider>
+      <AuthListener />
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<App />} />

@@ -1,4 +1,3 @@
-// Table.js
 import React, { useEffect, useState } from "react";
 import Layout1 from "../Layout1/layout1";
 import supabase from "../../config/supabaseClient";
@@ -13,6 +12,8 @@ const Table = () => {
       .from("busstop")
       .select("stop_id")
       .eq("stop_name", stopName);
+    
+      console.log(data)
 
     if (error) {
       console.error(`Error fetching stop ID for ${stopName}: `, error);
@@ -76,7 +77,7 @@ const Table = () => {
   
   return (
     <Layout1>
-      <div className="flex flex-col justify-center m-auto mt-[200]">
+      <div className="flex flex-col justify-center ml-40 mt-[200] w-[120rem] px-4">
         {/* Check if there are any buses to display */}
         {buses.length > 0 ? (
           // If buses exist, map through them and render BusCard for each

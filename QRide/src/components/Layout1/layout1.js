@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./layout1.css";
+import "./layout1.css"; 
 import home_image from "../Assets/home.png";
 import heart_image from "../Assets/favourite.png";
 import scan_image from "../Assets/qrcode.png";
@@ -7,7 +7,7 @@ import user_image from "../Assets/profile.png";
 import { useNavigate } from "react-router-dom";
 import bg_image from "../Assets/bg.png";
 import supabase from "../../config/supabaseClient";
-
+import BusNotifications from '../NotificationBar/Notifications'; // Ensure this path is correct
 
 const Layout1 = ({ children }) => {
   const navigate = useNavigate();
@@ -18,141 +18,107 @@ const Layout1 = ({ children }) => {
     email: "",
   });
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [isNavbarHovered, setIsNavbarHovered] = useState(false);
+
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
 
-  const fetchuser = async () => {
-    try {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
+        if (error) throw error;
 
-      if (error) {
-        throw error;
-      }
-      if (user) {
-        console.log(user);
-        console.log(user.user_metadata.name)
-        setUserData({
-          email: user.email,
-          name: user.user_metadata.name,
-        });
-        const userId = user.id;
-        const { data:namedata, error:nameerror } = await supabase
-        .from("user_details")
-        .select("first_name, last_name")
-        .eq("user_id", userId);
+        if (user) {
+          console.log(user);
+          setUserData({
+            email: user.email,
+            name: user.user_metadata.name,
+          });
 
-        if(nameerror){
-          throw nameerror;
+          const userId = user.id;
+          const { data: namedata, error: nameerror } = await supabase
+            .from("user_details")
+            .select("first_name, last_name")
+            .eq("user_id", userId);
+
+          if (nameerror) throw nameerror;
+
+          if (namedata && namedata.length > 0) {
+            console.log(namedata);
+            setUserData(prevData => ({
+              ...prevData,
+              first_name: namedata[0].first_name,
+              last_name: namedata[0].last_name,
+            }));
+          }
         }
-        if(namedata){
-          console.log(namedata);
-          setUserData(prevData => ({
-            ...prevData,
-            first_name: namedata[0].first_name,
-            last_name: namedata[0].last_name,
-          }));
-        }
-        // const { data: creditsData, error: creditsError } = await supabase
-        //   .from("credits")
-        //   .select("credits")
-        //   .eq("id", userId);
-
-        // if (creditsError) {
-        //   throw creditsError;
-        // }
-
-        // if (creditsData) {
-        //   // Assuming that there's only one row for the user in "creditdetails" table
-        //   setUserData((prevData) => ({
-        //     ...prevData,
-        //     credits: creditsData[0].credits,
-        //   }));
-        // }
+      } catch (error) {
+        console.error("Error fetching email:", error.message);
       }
-    } catch (error) {
-      console.error("Error fetching email:", error.message);
-    }
-  };
+    };
 
-  
+    fetchUser();
+  }, []);
 
-  fetchuser();
-
-}, []);
   const navigateToHome = () => {
-    navigate("/");
+    navigate("/dashboard");
   };
 
   const navigateToQr = () => {
-    navigate("/QR");
+    navigate("/qr"); // Ensure this is lowercase
   };
 
   const navigateToFav = () => {
-    navigate("/Fav");
+    navigate("/fav");
   };
 
-  const openUserModal = () => {
-    setIsUserModalOpen(true);
-  };
-
-  const closeUserModal = () => {
-    setIsUserModalOpen(false);
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      // Redirect or update state after successful logout
+      navigate('/login');
+    } catch (error) {
+      console.error('Error logging out:', error.message);
+    }
   };
 
   return (
     <div className="bg-[#c9e9e1]">
+      <BusNotifications /> {/* Ensure this is correctly placed */}
       <div className="bg-image">
         <img src={bg_image} alt="Background" />
       </div>
       <div className="row">
-      <div
-            className="user-info"
-            onMouseEnter={openUserModal}
-            onMouseLeave={closeUserModal}
-          >
-            <img src={user_image} alt="User" className="user-icon" />
-          </div>
-        <div className="container">
-
-          <div className="icons">
-            <img
-              src={home_image}
-              onClick={navigateToHome}
-              className="icon"
-              alt="Home"
-            />
-            <img
-              src={scan_image}
-              onClick={navigateToQr}
-              className="icon"
-              alt="QR Code"
-            />
-            <img
-              src={heart_image}
-              onClick={navigateToFav}
-              className="icon"
-              alt="Favorite"
-            />
+        <div className="user-info" onMouseEnter={() => setIsUserModalOpen(true)} onMouseLeave={() => setIsUserModalOpen(false)}>
+          <img src={user_image} alt="User" className="user-icon" />
+          <div className={`user-modal ${isUserModalOpen ? 'visible' : ''}`}>
+            <p>{userData.first_name} {userData.last_name} {userData.name}</p>
+            <p>{userData.email}</p>
+            <button onClick={handleLogout}>Logout</button>
           </div>
         </div>
-        {isUserModalOpen && (
-          <div
-            className="user-modal"
-            onMouseEnter={openUserModal}
-            onMouseLeave={closeUserModal}
-          >
-            <p>
-              {userData.first_name} {userData.last_name}{userData.name}
-            </p>
-            <p>{userData.email}</p>
-            <p>Credits{userData.credits}</p>
-            <button onClick={() => supabase.auth.signOut()}>Logout</button>        
+        <div
+          className={`container ${isNavbarHovered ? 'expanded' : ''}`}
+          onMouseEnter={() => setIsNavbarHovered(true)}
+          onMouseLeave={() => setIsNavbarHovered(false)}
+        >
+          <div className="icons">
+            <div className="icon-wrapper" onClick={navigateToHome}>
+            <img src={home_image} className="icon" alt="Home" />
+              <span className="icon-label">Home</span>
             </div>
-        )}
-        <div className="right-container" style={{ margin: 'auto',marginTop: '8rem',marginLeft:'auto',marginRight:'auto'}}>
-        {children}
+            <div className="icon-wrapper" onClick={navigateToQr}>
+              <img src={scan_image} className="icon" alt="QR Code" />
+              <span className="icon-label">QR Code</span>
+            </div>
+            <div className="icon-wrapper" onClick={navigateToFav}>
+              <img src={heart_image} className="icon" alt="Favorite" />
+              <span className="icon-label">Favorite</span>
+            </div>
+          </div>
+        </div>
+        <div className="right-container" style={{ margin: 'auto', marginTop: '8rem', marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
+          {children}
         </div>
       </div>
     </div>
@@ -160,3 +126,4 @@ const Layout1 = ({ children }) => {
 };
 
 export default Layout1;
+
