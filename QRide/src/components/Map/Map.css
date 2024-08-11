@@ -1,4 +1,4 @@
-/* height of the container */
+height of the container
 .leaflet-container {
     height: 100vh;
   }
@@ -7,9 +7,9 @@
   }
   
   .blue-marker-img {
-    width: 25px; /* Adjust size as needed */
-    height: 41px; /* Adjust size as needed */
-    animation: pulse-animation 1.5s infinite; /* Keeping the pulse animation on the marker itself */
+    width: 25px; 
+    height: 41px; 
+    animation: pulse-animation 1.5s infinite; 
   }
   
   @keyframes pulse-animation {
