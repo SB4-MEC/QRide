@@ -89,7 +89,7 @@ const Map = () => {
     <div>
       {loadError && <div className="error">{`Error loading map: ${loadError.message}`}</div>}
       <LoadScript 
-        googleMapsApiKey="AIzaSyCjJx8ykUK4Pk-FdagbyR1RhtYTv29-zEU"
+        googleMapsApiKey=""
         onLoad={() => console.log('Script loaded')}
         onError={(error) => {
           setLoadError(error);
