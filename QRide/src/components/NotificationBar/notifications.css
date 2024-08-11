@@ -1,0 +1,44 @@
+.notification-popup {
+    display: none; /* Initially hidden */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .notification-popup.show {
+    display: block; /* Show when class show is added */
+  }
+  
+  .notification-popup h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .notification-popup p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .notification-error {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    padding: 15px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    z-index: 1000;
+  }
+  

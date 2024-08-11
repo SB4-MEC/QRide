@@ -7,18 +7,23 @@ import  {AuthProvider}  from "./context/AuthProvider";
 import { BusProvider } from "./context/BusProvider";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthListener from "./components/AuthListener";
+import { BookingProvider } from './context/BookingContext';
+
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthProvider>
       <BusProvider>
+      <BookingProvider> 
       <AuthListener />
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<App />} />
         </Routes>
       </BrowserRouter>
+      </BookingProvider>
       </BusProvider>
     </AuthProvider>
   </React.StrictMode>

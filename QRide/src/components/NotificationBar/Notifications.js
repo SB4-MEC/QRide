@@ -1,85 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import supabase from '../../config/supabaseClient';
+import { useBooking } from '../../context/BookingContext';
 
 const BusNotifications = () => {
-  const [busInfo, setBusInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { bookingDetails } = useBooking();
+  const [notification, setNotification] = useState('');
+  const [counter, setCounter] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
-    const fetchBusData = async () => {
-      setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('bus_schedule')
-          .select(`
-            schedule_id,
-            bus_id,
-            scheduled_time,
-            start_stop,
-            end_stop,
-            date_part('epoch', scheduled_time - NOW()) as diff
-          `)
-          .eq('start_stop', 105)
-          .eq('end_stop', 104)
-          .lt('diff', 600); // Filter by time difference less than 600 seconds (10 minutes)
+    if (!bookingDetails) return;
 
-        if (error) throw error;
+    const { from, to, time } = bookingDetails;
 
-        if (data.length === 0) {
-          setBusInfo(null);
-          setLoading(false);
-          return;
-        }
-        
-        // Find the nearest bus within the next 10 minutes
-        const now = new Date();
-        const nearestBus = data.reduce((closest, current) => {
-          const currentDiff = Math.abs(new Date(current.scheduled_time) - now);
-          const closestDiff = Math.abs(new Date(closest.scheduled_time) - now);
-          return currentDiff < closestDiff ? current : closest;
-        });
-
-        setBusInfo(nearestBus);
-      } catch (err) {
-        console.error('Error fetching bus data:', err.message);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+    const calculateTimeDifference = (busTime) => {
+      const now = new Date();
+      const busArrivalTime = new Date(`${now.toDateString()} ${busTime}`);
+      const timeDifference = busArrivalTime - now; // Time difference in milliseconds
+      return timeDifference / 60000; // Convert to minutes
     };
 
-    // Poll every minute (60000 milliseconds)
-    const interval = setInterval(fetchBusData, 60000);
+    const timeDifference = calculateTimeDifference(time);
 
-    // Initial fetch
-    fetchBusData();
+    if (timeDifference < 0) {
+      setNotification(`The bus from ${from} to ${to} has already left.`);
+      setShowNotification(true);
+    } else if (timeDifference) {
+      setNotification(`The bus from ${from} to ${to} will arrive in the next ${Math.ceil(timeDifference)} minutes!`);
+      setCounter(Math.ceil(timeDifference));
+      setShowNotification(true);
+      
+      const intervalId = setInterval(() => {
+        setCounter((prevCounter) => {
+          if (prevCounter > 0) {
+            return prevCounter - 1;
+          }
+          clearInterval(intervalId); // Stop the interval when counter reaches zero
+          return 0;
+        });
+      }, 60000); // Update every minute
 
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
+      return () => clearInterval(intervalId); // Cleanup interval on component unmount
+    } else {
+      setShowNotification(false); // Explicitly hide if condition is not met
+    }
+  }, [bookingDetails]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    let timeoutId;
+    if (showNotification) {
+      timeoutId = setTimeout(() => setShowNotification(false), 5000); // Hide notification after 5 seconds
+    }
+    return () => clearTimeout(timeoutId);
+  }, [showNotification, notification]);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const notificationBarStyles = {
+    padding: '1rem',
+    borderRadius: '5px',
+    textAlign: 'center',
+    marginTop: '1rem',
+    fontSize: '1.2rem',
+    fontFamily: 'Arial, sans-serif',
+    backgroundColor: '#f44336',
+    color: '#fff',
+    transition: 'opacity 0.5s ease-in-out',
+    opacity: showNotification ? 1 : 0,
+  };
 
   return (
-    <div>
-      <h1>Quickest Bus Arrival Notification</h1>
-      {busInfo ? (
-        <div>
-          <p><strong>Bus ID:</strong> {busInfo.bus_id}</p>
-          <p><strong>Scheduled Time:</strong> {new Date(busInfo.scheduled_time).toLocaleTimeString()}</p>
-          <p><strong>Start Stop:</strong> {busInfo.start_stop}</p>
-          <p><strong>End Stop:</strong> {busInfo.end_stop}</p>
-        </div>
-      ) : (
-        <p>No buses arriving within the next 10 minutes</p>
-      )}
+    <div 
+     className={`notification-bar`} 
+     style={notificationBarStyles}>
+      {notification && <p>{`${notification}${counter !== null ? ` (${counter} minutes left)` : ''}`}</p>}
     </div>
   );
 };
