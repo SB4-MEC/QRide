@@ -92,7 +92,8 @@ const Layout1 = ({ children }) => {
         <div className="user-info" onMouseEnter={() => setIsUserModalOpen(true)} onMouseLeave={() => setIsUserModalOpen(false)}>
           <img src={user_image} alt="User" className="user-icon" />
           <div className={`user-modal ${isUserModalOpen ? 'visible' : ''}`}>
-            <p>{userData.first_name} {userData.last_name} {userData.name}</p>
+            <p>{userData.first_name} {userData.last_name} </p>
+            {/* {userData.name} */}
             <p>{userData.email}</p>
             <button onClick={handleLogout}>Logout</button>
           </div>

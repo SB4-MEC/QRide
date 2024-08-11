@@ -4,6 +4,7 @@ import heart_3 from "./Assets/heart3.png";
 import supabase from "../config/supabaseClient";
 import { useBus } from "../context/BusProvider";
 import { useNavigate } from "react-router";
+import Map from "./Map/Map";
 
 const BusCard = ({ bus, currentLocation, selectedDestination }) => {
   const [timeMessage, setTimeMessage] = useState("");
@@ -36,7 +37,10 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
       console.log(data);
     }
   };
-
+  const handleBusClick = () => {
+    // Navigate to the booking page and pass bus details via state
+    navigate("/booking", { state: { bus, currentLocation, selectedDestination } });
+  };
   const handleRedHeartClick = () => {
     setWhiteHeartVisible(true);
     setRedHeartVisible(false);
@@ -65,26 +69,26 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
   }, [bus.timing]);
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 mb-4 w-full flex flex-col items-center justify-center">
+    <div className="bg-white shadow-md rounded-lg p-4 mb-4 w-full flex flex-col">
       <div className="flex justify-between items-center w-full">
-        <div className="flex flex-col">
+        <div className="flex flex-col w-1/6">
           <span className="text-l text-gray-500">Bus Name: {bus.bus_name}</span>
         </div>
-        <div className="text-green-600 font-bold text-xl">
+        <div className="text-green-600 font-bold text-xl w-1/4"> {/* Adjusted padding */}
           {timeMessage}
         </div>
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start w-1/8"> {/* Adjusted padding */}
           <span className="text-sm text-gray-500">{currentLocation}</span>
         </div>
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start w-1/8"> {/* Adjusted padding */}
           <span className="text-sm text-gray-500">{selectedDestination}</span>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col w-1/8 text-right"> {/* Adjusted padding */}
           <div className="text-green-600 font-bold text-xl">
             ₹{bus.price}/KM
           </div>
         </div>
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-end w-1/8">
           {whiteHeartVisible && (
             <img
               src={heart_3}
@@ -112,7 +116,7 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
             Live Tracking
           </span>
         </div>
-        <button onClick={navigatetoBooking} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+        <button onClick={handleBusClick} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer">
           BOOK NOW{" "}
         </button>
       </div>
@@ -123,6 +127,8 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
       </div>
     </div>
   );
+  
+
 };
 
 export default BusCard;

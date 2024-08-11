@@ -16,6 +16,7 @@ import Booking from "./components/Booking/booking";
 import Map from "./components/Map/Map";
 import Favourites from "./components/Favourite/favourite";
 import Notification from "./components/NotificationBar/Notifications"
+import History from "./components/History/history";
 function App() {
   return (
     <Routes>
@@ -38,6 +39,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/QR" element={<QRCodeScanner />} />
         <Route path="/notify" element={<Notification />} />
+        <Route path="/history" element={<History />} />
 
       </Route>
 

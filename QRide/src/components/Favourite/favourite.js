@@ -10,8 +10,8 @@ const Favourite = () => {
   return (
     <div>
     <Layout1>
-        <div className="flex flex-col justify-center m-auto mt-[200]">
-        {/* Check if there are any buses to display */}
+    <div className="flex flex-col justify-center ml-40 mt-[200] w-[120rem] px-4">
+    {/* Check if there are any buses to display */}
         {filteredBuses.length > 0 ? (
           // If buses exist, map through them and render BusCard for each
           filteredBuses.map((bus) => (
@@ -21,11 +21,12 @@ const Favourite = () => {
               currentLocation={currentLocation} 
               selectedDestination={selectedDestination} 
               className="bus-card w-full" 
+              redHeartVisible={true}
             />
           ))
         ) : (
           // If no buses are found, render a message instead
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex justify-center items-center " role="alert">
             <strong className="font-bold">No buses found!</strong>
             <span className="block sm:inline"> We couldn't find any favourite buses for your route.</span>
           </div>
