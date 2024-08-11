@@ -3,7 +3,6 @@ import Layout1 from "../Layout1/layout1";
 import supabase from "../../config/supabaseClient";
 import BusCard from "../BusCard"; // Import the BusCard component
 import { useBus } from "../../context/BusProvider";
-import Map from "../Map/Map";
 
 const Table = () => {
   const { currentLocation, selectedDestination, buses, setBuses } = useBus();

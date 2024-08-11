@@ -4,7 +4,6 @@ import heart_3 from "./Assets/heart3.png";
 import supabase from "../config/supabaseClient";
 import { useBus } from "../context/BusProvider";
 import { useNavigate } from "react-router";
-import Map from "./Map/Map";
 
 const BusCard = ({ bus, currentLocation, selectedDestination }) => {
   const [timeMessage, setTimeMessage] = useState("");
