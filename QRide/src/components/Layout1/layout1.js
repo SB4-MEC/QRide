@@ -4,6 +4,7 @@ import home_image from "../Assets/home.png";
 import heart_image from "../Assets/favourite.png";
 import scan_image from "../Assets/qrcode.png";
 import user_image from "../Assets/profile.png";
+import bell_image from "../Assets/bell.jpg"; // Import the bell icon image
 import { useNavigate } from "react-router-dom";
 import bg_image from "../Assets/bg.png";
 import supabase from "../../config/supabaseClient";
@@ -71,6 +72,10 @@ const Layout1 = ({ children }) => {
     navigate("/fav");
   };
 
+  const navigateToNotifications = () => {
+    navigate("/notificationlist"); // Navigate to /notifications
+  };
+
   const handleLogout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -116,6 +121,10 @@ const Layout1 = ({ children }) => {
               <img src={heart_image} className="icon" alt="Favorite" />
               <span className="icon-label">Favorite</span>
             </div>
+            <div className="icon-wrapper" onClick={navigateToNotifications}>
+              <img src={bell_image} className="icon" alt="Notifications" />
+              <span className="icon-label">Notifications</span>
+            </div>
           </div>
         </div>
         <div className="right-container" style={{ margin: 'auto', marginTop: '8rem', marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
@@ -127,4 +136,3 @@ const Layout1 = ({ children }) => {
 };
 
 export default Layout1;
-

@@ -203,3 +203,17 @@
     right: 60px;
   }
 }
+
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 5rem;
+  cursor: pointer;
+}
+
+/* Specific styles for bell icon */
+.icon-wrapper:nth-child(4) {
+  margin-bottom: 0;
+}

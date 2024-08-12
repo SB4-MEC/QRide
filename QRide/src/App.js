@@ -16,6 +16,7 @@ import Booking from "./components/Booking/booking";
 import Map from "./components/Map/Map";
 import Favourites from "./components/Favourite/favourite";
 import Notification from "./components/NotificationBar/Notifications"
+import NotificationsList from "./components/NotificationList/NotificationList";
 import History from "./components/History/history";
 function App() {
   return (
@@ -32,12 +33,13 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="resetpassword" element={<ResetPwd />} />
+        <Route path="/notificationlist" element={<NotificationsList />} />
       </Route>
 
       {/* we want to protect these routes */}
       <Route element={<RequireAuth />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/QR" element={<QRCodeScanner />} />
+        <Route path="/qr" element={<QRCodeScanner />} />
         <Route path="/notify" element={<Notification />} />
         <Route path="/history" element={<History />} />
 
