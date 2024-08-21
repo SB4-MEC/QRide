@@ -1,5 +1,3 @@
-/* Qr.css */
-
 .background {
   /* ... (unchanged styles) */
   background-color: rgb(30, 29, 29);
@@ -25,6 +23,7 @@
   justify-content: center;
   align-items: center;
   margin: auto;
+  position: relative; /* Added to position the red line correctly */
 }
 
 .video {
@@ -39,8 +38,97 @@
   font-size: 2rem;
 }
 
-/* Add additional styles as needed */
+@keyframes fadeInScanEffect {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
+.red-line {
+  position: absolute;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgb(142, 243, 109), transparent); /* Updated for fading effect */
+  animation: scanEffect 2s ease-in-out, fadeInScanEffect 2s forwards; /* Added fadeInScanEffect animation */
+  animation-fill-mode: forwards;
+}
+
+@keyframes scanEffect {
+  0% {
+    top: 0;
+    opacity: 1;
+  }
+  90% {
+    top: 100%;
+    opacity: 0;
+  }
+  100% {
+    top: 0;
+    opacity: 0;
+    height: 0;
+    display: none;
+  }
+}
+
+@keyframes popOutEffect {
+  0% {
+    transform: scale(0.5) translateX(-50%);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05) translateX(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateX(0%);
+    opacity: 1;
+  }
+}
+
+/* Corner styles */
+.corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: solid 8px white;
+}
+
+.top-left {
+  top: -10px;
+  left: -10px;
+  border-right: none;
+  animation: popOutEffect 5s ease-out;
+  border-bottom: none;
+}
+
+.top-right {
+  top: -10px;
+  right: -10px;
+  border-left: none;
+  border-bottom: none;
+  animation: popOutEffect 5s ease-out;
+}
+
+.bottom-left {
+  bottom: -10px;
+  left: -10px;
+  border-right: none;
+  border-top: none;
+  animation: popOutEffect 5s ease-out;
+}
+
+.bottom-right {
+  bottom: -10px;
+  right: -10px;
+  border-left: none;
+  border-top: none;
+  animation: popOutEffect 5s ease-out;
+}
+/* Additional styles */
 @media screen and (max-width: 425px) {
   .verify-container,
   .video-container {
@@ -91,19 +179,15 @@
 .dropdown-content a:hover {
   background-color: #f1f1f1;
   border-radius: 20px;
-
 }
 
 .verify-gif {
   transform: scale(0.5);
   border-radius: 20px;
   margin-top: -10rem;
+  max-width: 100%; /* Ensures the gif doesn't exceed its container */
 }
 
 .verify-container.move-left {
   transition: transform 1s ease;
-}
-
-.verify-gif {
-  max-width: 100%;
 }
