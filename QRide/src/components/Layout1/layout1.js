@@ -89,7 +89,7 @@ const Layout1 = ({ children }) => {
 
   return (
     <div className="bg-[#c9e9e1]">
-      <BusNotifications /> {/* Ensure this is correctly placed */}
+      <BusNotifications /> 
       <div className="bg-image">
         <img src={bg_image} alt="Background" />
       </div>
@@ -119,7 +119,7 @@ const Layout1 = ({ children }) => {
             </div>
             <div className="icon-wrapper" onClick={navigateToFav}>
               <img src={heart_image} className="icon" alt="Favorite" />
-              <span className="icon-label">Favorite</span>
+              <span className="icon-label">Favourite</span>
             </div>
             <div className="icon-wrapper" onClick={navigateToNotifications}>
               <img src={bell_image} className="icon" alt="Notifications" />

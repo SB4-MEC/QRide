@@ -40,7 +40,7 @@ const Map = () => {
 
       const resizedBusIcon = {
         url: busIconImg,
-        scaledSize: new window.google.maps.Size(30, 40),
+        scaledSize: new window.google.maps.Size(0, 40),
       };
 
       const initialMarkers = [
@@ -63,7 +63,7 @@ const Map = () => {
           const userLocation = {
             geocode: [position.coords.latitude, position.coords.longitude],
             popUp: "Your Location",
-            icon: resizedBlueIcon // Assign resizedBlueIcon here
+            // icon: resizedBlueIcon // Assign resizedBlueIcon here
           };
           setMarkers([...initialMarkers, userLocation]);
           console.log('User location fetched and markers set', [...initialMarkers, userLocation]); // Debugging statement
