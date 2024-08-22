@@ -33,6 +33,7 @@ const BusTicketBooking = () => {
     bus_name: "",
     from_place: "",
     to_place: "",
+    departure_time: "",
     price: null,
     payment_status: "",
     number: null,
@@ -133,7 +134,8 @@ const BusTicketBooking = () => {
         const bookingPayload = {
           user_id: userId,
           bus_id: bus.bus_id,
-          bus_name: bus.bus_name,
+          bus_name: bus.bus_name || bus.vehicle_number,
+          departure_time: bus.stations[0].arrivalTime,
           from_place: currentLocation,
           to_place: selectedDestination,
           price: price,
@@ -273,7 +275,7 @@ const BusTicketBooking = () => {
         <div style={detailContainerStyles}>
           <div style={detailStyles}><strong>From:</strong> {currentLocation}</div>
           <div style={detailStyles}><strong>To:</strong> {selectedDestination}</div>
-          <div style={detailStyles}><strong>Bus Name:</strong> {bus.bus_name}</div>
+          <div style={detailStyles}><strong>Bus Name:</strong> {bus.bus_name || bus.vehicle_number}</div>
           <div style={detailStyles}><strong>Departure Time:</strong> {bus.stations[0].arrivalTime}</div>
           <div style={detailStyles}><strong>Price per Ticket:</strong> ₹{ticketPrice}</div>
           <div style={detailStyles}><strong>Total Price:</strong> ₹{price}</div>
