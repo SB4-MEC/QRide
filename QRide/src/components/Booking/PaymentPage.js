@@ -21,7 +21,8 @@ const PaymentForm = ({ setBookingDetails }) => {
   const [paymentRequest, setPaymentRequest] = useState(null);
   const location = useLocation();
   const { userData, bus, currentLocation, selectedDestination, price, ticketCount } = location.state || {};
-
+  
+  
   useEffect(() => {
     if (stripe) {
       const pr = stripe.paymentRequest({

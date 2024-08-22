@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import "./Qr.css";
 import bgdot from "../Assets/bgdot.png";
 import bgdot1 from "../Assets/bgdot1.png";
-import Verify from "../Assets/verify.gif";
 import { useBus } from "../../context/BusProvider";
 import supabase from "../../config/supabaseClient";
 
@@ -35,13 +34,10 @@ const QRCodeScanner = () => {
     "CUSAT",
     // Add more bus stops as needed
   ]);
+  const [verified, setVerified] = useState(false); // New state for handling verification
 
   const toggleDropdown = () => {
-    // If a QR code has been scanned, do not toggle the dropdown
-    if (result) {
-      return;
-    }
-
+    if (result) return;
     setDropdownOpen(!isDropdownOpen);
   };
 
@@ -50,20 +46,14 @@ const QRCodeScanner = () => {
     console.log(selectedDestination);
     setDropdownOpen(false);
   };
-  
+
   useEffect(() => {
     if (selectedDestination) {
       navigate("/table");
     }
-  }, [selectedDestination]); // Dependency array
+  }, [selectedDestination]); 
 
-  let backgroundImageUrl = `url(${bgdot})`;
-  if (window.innerWidth <= 425) {
-    backgroundImageUrl = `url(${bgdot1})`;
-  }
-  
   useEffect(() => {
-    // Fetch bus stops on component mount
     const fetchBusStops = async () => {
       let { data: busstops, error } = await supabase.from('busstop').select('stop_name');
       if (error) {
@@ -74,13 +64,11 @@ const QRCodeScanner = () => {
         setBusStops(stopNames);
       }
     };
-
     fetchBusStops();
   }, []);
-  
+
   const backgroundStyle = {
-    backgroundImage: backgroundImageUrl,
-    backgroundSize: "cover",
+    width: "100vw",
     height: "100vh",
     display: "flex",
     flexDirection: "column",
@@ -98,9 +86,8 @@ const QRCodeScanner = () => {
       } else {
         setCurrentLocation(busStopTextCodes[scannedText.toLowerCase()]);
         console.log(currentLocation);
-
-        // If the scanned QR is correct, initiate the dropdown menu
-        toggleDropdown();
+        setVerified(true);
+        setTimeout(toggleDropdown, 1000); 
       }
     },
   });
@@ -115,43 +102,41 @@ const QRCodeScanner = () => {
   };
 
   return (
-    <div className="background" style={backgroundStyle}>
+    <div className={`background ${verified ? 'verified' : ''}`} style={backgroundStyle}>
       {result ? (
-        <img src={Verify} alt="Verify" className="verify-gif" />
+        <div></div>
       ) : (
-        <div className="video-container">
-          <div className="red-line"></div> {/* Red line for scan effect */}
+        <div className={`video-container ${verified ? "slide-out" : ""}`}>
+          <div className="red-line"></div>
           <video className="video" ref={ref} />
           <div className="corner top-left"></div>
           <div className="corner top-right"></div>
           <div className="corner bottom-left"></div>
           <div className="corner bottom-right"></div>
-          <p>
-            <span className="qr-text">Scan your QR!</span>
-          </p>
+          <p><span className="qr-text">Scan your QR!</span></p>
         </div>
       )}
-
+    
       {result && (
-        <div className="dropdown-container">
+        <div className="px-2">
+          
+        <div className="text-center text-black font-bold "  style={{ fontSize: '4rem' ,fontFamily: '"Open Sans", sans-serif' }} >Scanned Successfully!</div>
+        <div className={`dropdown-container ${verified ? "fade-in" : ""}`}>
+          
           <button onClick={toggleDropdown} className="dropdown-button">
             Select Destination
           </button>
-
+    
           {isDropdownOpen && (
             <div className="dropdown-content">
               {busStops.map((stop, index) => (
-                <a
-                  key={index}
-                  onClick={() => {
-                    handleDestinationSelect(stop);
-                  }}
-                >
+                <a key={index} onClick={() => handleDestinationSelect(stop)}>
                   {stop}
                 </a>
               ))}
             </div>
           )}
+        </div>
         </div>
       )}
     </div>

@@ -1,10 +1,33 @@
-.background {
-  /* ... (unchanged styles) */
-  background-color: rgb(30, 29, 29);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+@keyframes expandCircle {
+  from {
+    width: 100px;
+    height: 100px;
+  }
+  to {
+    width: 100vw;
+    height: 200vh; /* Increased to ensure full screen coverage */
+    border-radius: 0; /* Remove the circle shape for full screen */
+  }
+}
+
+.background::before {
+  content: '';
+  position: absolute;
+  background-color: rgb(187 247 208); /* Light green color */
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s ease-out;
+  filter: blur(200px);
+  overflow-y: hidden;
+  z-index:-1 ;
+}
+
+.background.verified::before {
+  animation: expandCircle 1s forwards;
 }
 
 .verify-container {
@@ -23,7 +46,7 @@
   justify-content: center;
   align-items: center;
   margin: auto;
-  position: relative; /* Added to position the red line correctly */
+  position: relative;
 }
 
 .video {
@@ -33,7 +56,7 @@
 }
 
 .qr-text {
-  color: white;
+  color: black;
   font-family: 'Poppins', sans-serif;
   font-size: 2rem;
 }
@@ -49,11 +72,11 @@
 
 .red-line {
   position: absolute;
-  left: 0px;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgb(142, 243, 109), transparent); /* Updated for fading effect */
-  animation: scanEffect 3s ease-in-out, fadeInScanEffect 2s forwards; /* Added fadeInScanEffect animation */
+  background: linear-gradient(to bottom, rgb(142, 243, 109), transparent);
+  animation: scanEffect 3s ease-in-out, fadeInScanEffect 2s forwards;
   animation-fill-mode: forwards;
 }
 
@@ -94,14 +117,20 @@
   position: absolute;
   width: 30px;
   height: 30px;
-  border: solid 8px white;
+  border: solid 8px black;
+}
+
+.top-left,
+.top-right,
+.bottom-left,
+.bottom-right {
+  animation: popOutEffect 5s ease-out;
 }
 
 .top-left {
   top: -10px;
   left: -10px;
   border-right: none;
-  animation: popOutEffect 5s ease-out;
   border-bottom: none;
 }
 
@@ -110,7 +139,6 @@
   right: -10px;
   border-left: none;
   border-bottom: none;
-  animation: popOutEffect 5s ease-out;
 }
 
 .bottom-left {
@@ -118,7 +146,6 @@
   left: -10px;
   border-right: none;
   border-top: none;
-  animation: popOutEffect 5s ease-out;
 }
 
 .bottom-right {
@@ -126,9 +153,8 @@
   right: -10px;
   border-left: none;
   border-top: none;
-  animation: popOutEffect 5s ease-out;
 }
-/* Additional styles */
+
 @media screen and (max-width: 425px) {
   .verify-container,
   .video-container {
@@ -140,8 +166,9 @@
 }
 
 .dropdown-container {
-  margin-top: -80px;
-  display: inline-block;
+  position: relative; /* Necessary for correct stacking */
+  z-index: 1000; 
+  max-width:600px     /* Ensure it stacks above lower elements */
 }
 
 .dropdown-button {
@@ -151,8 +178,13 @@
   border: none;
   cursor: pointer;
   border-radius: 10px;
-  width: 400px;
+  width: 600px;
+  height:60px;
+  z-index: 999;       /* High z-index to be above lower containers */
+  position: relative; /* Create a new stacking context */
 }
+
+
 
 .dropdown-content {
   display: block;
@@ -162,9 +194,9 @@
   background-color: #f9f9f9;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
-  width: 400px;
+  width: 600px;
   border-radius: 20px;
-  max-height: 200px; /* Adjust this value as needed */
+  max-height: 400px; /* Adjust this value as needed */
   overflow-y: auto; /* Add scrollbar when content exceeds max-height */
 }
 
@@ -174,6 +206,7 @@
   text-decoration: none;
   display: block;
   color: #333;
+  height:60px;
 }
 
 .dropdown-content a:hover {
@@ -190,4 +223,39 @@
 
 .verify-container.move-left {
   transition: transform 1s ease;
+}
+
+/* Define sliding-out animation */
+@keyframes slideOutLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Define sliding-in animation */
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Apply sliding out animation */
+.video-container.slide-out {
+  animation: slideOutLeft 1s forwards;
+}
+
+/* Apply sliding in animation */
+.verify-gif.slide-in,
+.dropdown-container.slide-in {
+  animation: slideInRight 1s forwards;
 }
