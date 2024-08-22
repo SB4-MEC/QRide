@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import supabase from "../../config/supabaseClient"; // Import your Supabase client
+import supabase from "../../config/supabaseClient";
 import Layout1 from '../Layout1/layout1';
+import CreditModal from './CreditModal';
 import { useBooking } from "../../context/BookingContext.js";
+import html2canvas from "html2canvas";
+import { saveAs } from "file-saver";
+import TicketCard from './TicketCard';
 
 const BusTicketBooking = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { setBookingDetails } = useBooking(); // Use the setBookingDetails function from context
+  const { setBookingDetails } = useBooking();
 
   const { bus, currentLocation, selectedDestination } = state || {};
 
@@ -17,17 +21,32 @@ const BusTicketBooking = () => {
     first_name: "",
     last_name: "",
     email: "",
+    credits: 0,
   });
 
-  const [ticketCount, setTicketCount] = useState(1); // Initialize ticket count to 1
-  const [price, setPrice] = useState(bus?.price || 0); // Initialize price with bus price or 0
+  const [ticketCount, setTicketCount] = useState(1);
+  const [price, setPrice] = useState(bus?.price || 0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Fetch user data
+  const [isBookingSuccessful, setIsBookingSuccessful] = useState(false);
+  const [bookingDetails, setBookingDetailsState] = useState({
+    user_id: null,
+    bus_id: null,
+    bus_name: "",
+    from_place: "",
+    to_place: "",
+    price: null,
+    payment_status: "",
+    number: null,
+    other_details: null,
+  });
+  
+  const totalCreditsRequired = price * 2;
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const { data: { user }, error } = await supabase.auth.getUser();
-
         if (error) throw error;
 
         if (user) {
@@ -40,7 +59,7 @@ const BusTicketBooking = () => {
           const userId = user.id;
           const { data: namedata, error: nameerror } = await supabase
             .from("user_details")
-            .select("first_name, last_name,user_id")
+            .select("first_name, last_name,user_id,credits") 
             .eq("user_id", userId);
 
           if (nameerror) throw nameerror;
@@ -52,6 +71,7 @@ const BusTicketBooking = () => {
               first_name: namedata[0].first_name,
               last_name: namedata[0].last_name,
               user_id: namedata[0].user_id,
+              credits: namedata[0].credits,
             }));
           }
         }
@@ -63,7 +83,6 @@ const BusTicketBooking = () => {
     fetchUser();
   }, []);
 
-  // Update the price based on the ticket count
   useEffect(() => {
     if (bus && bus.price) {
       setPrice(bus.price * ticketCount);
@@ -80,51 +99,97 @@ const BusTicketBooking = () => {
     );
   }
 
-  // Handle payment process
-  const handlePayment = async () => {
-    if (!bus || !bus.bus_id) {
-      console.error('Selected bus details are missing.');
-      alert('Error: Selected bus details are missing. Please go back and select a bus.');
-      return;
-    }
-
-    const bookingDate = new Date();
-
-    try {
-      const { data, error } = await supabase
-        .from('bookings')
-        .insert([
-          {
-            user_id: userData.user_id,
-            bus_id: bus.bus_id,
-            bus_name: bus.bus_name,
-            from_place: currentLocation,
-            to_place: selectedDestination,
-            // booking_date: bookingDate,
-            price: price,
-            payment_status: 'Paid',
-            number: ticketCount, // Add the ticket count here
-            other_details: {
-              seat_number: 'A1', // Example detail, adjust as necessary
-              // bus_type: selectedBus.type, // Example detail, adjust as necessary
-            },
-          },
-        ]);
-
-      if (error) {
-        console.error('Error recording booking:', error);
-      } else {
-        console.log('Booking recorded successfully:', data);
-        setBookingDetails({ from: currentLocation, to: selectedDestination, time: bus.timing });
-        // Navigate to a confirmation page
-        {/*navigate('/booking-confirmation');*/}
+  const handleCardPaymentClick = () => {
+    navigate('/payment-page', {
+      state: {
+        userData,
+        bus,
+        currentLocation,
+        selectedDestination,
+        ticketCount,
+        price
       }
-    } catch (error) {
-      console.error('Error during payment process:', error);
-    }
+    });
   };
 
-  // Styles for the component
+  const handleCreditPaymentClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmCreditPayment = async () => {
+    try {
+      const userId = userData.user_id;
+      if (userData.credits >= totalCreditsRequired) {
+        const updatedCredits = userData.credits - totalCreditsRequired;
+  
+        const { error: updateError } = await supabase
+          .from('user_details')
+          .update({ credits: updatedCredits })
+          .eq('user_id', userId);
+  
+        if (updateError) throw new Error(`Update Error: ${updateError.message}`);
+  
+        setUserData(prev => ({ ...prev, credits: updatedCredits }));
+  
+        // Prepare booking details for insertion
+        const bookingPayload = {
+          user_id: userId,
+          bus_id: bus.bus_id,
+          bus_name: bus.bus_name,
+          from_place: currentLocation,
+          to_place: selectedDestination,
+          price: price,
+          payment_status: 'Paid',
+          number: ticketCount,
+          other_details: JSON.stringify({ seat_number: 'A1' }),
+        };
+  
+        // Log the booking details being sent to the database
+        console.log("Inserting Booking Payload:", bookingPayload);
+  
+        const { data: bookingData, error: bookingError } = await supabase
+          .from('bookings')
+          .insert([bookingPayload])
+          .single(); // Fetch the created booking data
+  
+        if (bookingError) throw new Error(`Booking Error: ${bookingError.message}`);
+  
+        // Log the response from the database
+        console.log("Booking Data:", bookingData);
+  
+        setBookingDetailsState(bookingPayload);
+        console.log(bookingDetails);
+        setIsBookingSuccessful(true); // Set booking success state
+  
+        alert('Payment Successful');
+      } else {
+        alert('Not enough credits');
+      }
+    } catch (error) {
+      console.error("Error updating credits or creating booking:", error.message);
+      alert(`Failed to process payment: ${error.message}`);
+    } finally {
+      setIsModalOpen(false);
+    }
+  };
+  
+
+  const handleDownloadTicket = () => {
+    const ticketArea = document.querySelector("#ticket-card-area");
+    if (!ticketArea) {
+      console.error("Element with id 'ticket-card-area' not found.");
+      return;
+    }
+    console.log("Element found:", ticketArea);
+
+    html2canvas(ticketArea).then(canvas => {
+      canvas.toBlob(blob => {
+        saveAs(blob, "ticket.png");
+      });
+    }).catch(err => console.error("Error capturing the ticket area:", err));
+  };
+
+
   const containerStyles = {
     maxWidth: '600px',
     margin: '2rem auto',
@@ -159,7 +224,6 @@ const BusTicketBooking = () => {
   const detailStyles = {
     fontSize: '1.25rem',
     color: '#444',
-    marginBottom: '0.5rem',
     lineHeight: '1.6',
   };
 
@@ -167,12 +231,17 @@ const BusTicketBooking = () => {
     padding: '0.75rem 2rem',
     fontSize: '1.1rem',
     color: '#ffffff',
+    maxWidth:'50%',
+    minWidth:'50%',
     backgroundColor: '#28a745',
     border: 'none',
     borderRadius: '0.5rem',
     cursor: 'pointer',
     transition: 'background-color 0.3s',
-    letterSpacing: '0.05rem',
+    letterSpacing: '0.06rem',
+    margin: '.5rem',
+    textAlign:'center',
+    font:'medium'
   };
 
   const buttonHoverStyles = {
@@ -185,7 +254,7 @@ const BusTicketBooking = () => {
     justifyContent: 'space-between',
     marginBottom: '1.5rem',
     width: '100%',
-    gap: '0.5rem' // Adjusted gap between counter buttons
+    gap: '0.5rem',
   };
 
   const counterButtonStyles = {
@@ -198,11 +267,6 @@ const BusTicketBooking = () => {
     cursor: 'pointer',
     transition: 'background-color 0.3s',
   };
-
-  console.log('State:', state);
-  console.log('Bus:', bus);
-  console.log('Current Location:', currentLocation);
-  console.log('Selected Destination:', selectedDestination);
 
   return (
     <Layout1>
@@ -220,7 +284,7 @@ const BusTicketBooking = () => {
           <button
             style={counterButtonStyles}
             onClick={() => {
-              setTicketCount((prev) => Math.max(1, prev - 1));
+              setTicketCount(prev => Math.max(1, prev - 1));
               setPrice(bus.price * (Math.max(1, ticketCount - 1)));
             }}
           >
@@ -230,24 +294,64 @@ const BusTicketBooking = () => {
           <button
             style={counterButtonStyles}
             onClick={() => {
-              setTicketCount((prev) => Math.min(10, prev + 1));
+              setTicketCount(prev => Math.min(10, prev + 1));
               setPrice(bus.price * (Math.min(10, ticketCount + 1)));
             }}
           >
             +
           </button>
         </div>
-        <button
-          style={buttonStyles}
-          onMouseOver={(e) => e.currentTarget.style.backgroundColor = buttonHoverStyles.backgroundColor}
-          onMouseOut={(e) => e.currentTarget.style.backgroundColor = buttonStyles.backgroundColor}
-          onClick={handlePayment}
-        >
-          Proceed to Payment
-        </button>
+        <div className="flex space-x-2">
+          <button
+            style={buttonStyles}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = buttonHoverStyles.backgroundColor} 
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = buttonStyles.backgroundColor}
+            onClick={handleCardPaymentClick}
+          >
+            Card Payment
+          </button>
+          <button
+            style={buttonStyles}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = buttonHoverStyles.backgroundColor}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = buttonStyles.backgroundColor}
+            onClick={handleCreditPaymentClick}
+          >
+            Pay Using App Credits
+          </button>
+        </div>
+
+        {/* Conditionally render the modal or booking success message */}
+        {isBookingSuccessful ? (
+          <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+            <h2>Booking Successful!</h2>
+            <button
+              style={{ ...buttonStyles, backgroundColor: '#007bff', marginTop: '1rem',padding:'1rem',maxWidth:'15rem'}}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0056b3'}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#007bff'}
+              onClick={handleDownloadTicket}
+            >
+              Download Ticket
+            </button>
+          </div>
+        ) : (
+          <CreditModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            totalCredits={totalCreditsRequired}
+            handleConfirm={handleConfirmCreditPayment}
+          />
+        )}
+
+        {/* Conditionally render the ticket card if booking is successful and paid with credits */}
+        {isBookingSuccessful && bookingDetails.payment_status === 'Paid' && (
+          <div id="ticket-card-area" style={{ marginTop: '2rem' }}>
+            <TicketCard bookingDetails={bookingDetails} />
+          </div>
+        )}
       </div>
     </Layout1>
   );
 };
 
 export default BusTicketBooking;
+

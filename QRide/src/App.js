@@ -18,6 +18,7 @@ import Favourites from "./components/Favourite/favourite";
 import Notification from "./components/NotificationBar/Notifications"
 import NotificationsList from "./components/NotificationList/NotificationList";
 import History from "./components/History/history";
+import PaymentPage from './components/Booking/PaymentPage';
 function App() {
   return (
     <Routes>
@@ -42,7 +43,7 @@ function App() {
         <Route path="/qr" element={<QRCodeScanner />} />
         <Route path="/notify" element={<Notification />} />
         <Route path="/history" element={<History />} />
-
+        <Route path="payment-page" element={<PaymentPage />} />
       </Route>
 
       {/* <Route path="/QR" element={<QRCodeScanner />} /> */}

@@ -7,6 +7,7 @@ import bgdot1 from "../Assets/bgdot1.png";
 import Verify from "../Assets/verify.gif";
 import { useBus } from "../../context/BusProvider";
 import supabase from "../../config/supabaseClient";
+
 const busStopTextCodes = {
   edapally: "EDAPPALLY",
   thrikkakara: "THRIKKAKARA",
@@ -49,7 +50,7 @@ const QRCodeScanner = () => {
     console.log(selectedDestination);
     setDropdownOpen(false);
   };
-  // Add this useEffect hook in your component
+  
   useEffect(() => {
     if (selectedDestination) {
       navigate("/table");
@@ -60,6 +61,7 @@ const QRCodeScanner = () => {
   if (window.innerWidth <= 425) {
     backgroundImageUrl = `url(${bgdot1})`;
   }
+  
   useEffect(() => {
     // Fetch bus stops on component mount
     const fetchBusStops = async () => {
@@ -75,6 +77,7 @@ const QRCodeScanner = () => {
 
     fetchBusStops();
   }, []);
+  
   const backgroundStyle = {
     backgroundImage: backgroundImageUrl,
     backgroundSize: "cover",
@@ -91,7 +94,6 @@ const QRCodeScanner = () => {
       setResult(scannedText);
 
       if (isValidURL(scannedText)) {
-        // Handle other cases (non-URL, non-"Edappally") as needed
         alert(`Please scan the correct QR code`);
       } else {
         setCurrentLocation(busStopTextCodes[scannedText.toLowerCase()]);
@@ -118,7 +120,12 @@ const QRCodeScanner = () => {
         <img src={Verify} alt="Verify" className="verify-gif" />
       ) : (
         <div className="video-container">
+          <div className="red-line"></div> {/* Red line for scan effect */}
           <video className="video" ref={ref} />
+          <div className="corner top-left"></div>
+          <div className="corner top-right"></div>
+          <div className="corner bottom-left"></div>
+          <div className="corner bottom-right"></div>
           <p>
             <span className="qr-text">Scan your QR!</span>
           </p>
@@ -152,35 +159,3 @@ const QRCodeScanner = () => {
 };
 
 export default QRCodeScanner;
-
-// const getListOfBuses = async (startStopId, endStopId) => {
-//   const { data, error } = await supabase
-//     .from('busdetail')
-//     .select(`
-//       bus_id,
-//       bus_name,
-//       timing,
-//       bus_route (
-//         id,
-//         busroutes
-//       ),
-//       start_stop:busstop (stop_name),
-//       end_stop:busstop (stop_name)
-//     `)
-//     .contains('bus_route:busroutes', [startStopId])
-//     .contains('bus_route:busroutes', [endStopId]);
-
-//   if (error) {
-//     console.error('Error retrieving list of buses: ', error);
-//     return [];
-//   }
-
-//   // Filter or sort your data as needed here
-//   return data;
-// };
-
-
-
-
-
-

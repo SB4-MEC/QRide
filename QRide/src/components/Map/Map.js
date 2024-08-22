@@ -7,6 +7,7 @@ import busIconImg from '../Assets/bus.png';
 
 const DEFAULT_LATITUDE = 10.0261;
 const DEFAULT_LONGITUDE = 76.3125;
+const key = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
 const containerStyle = {
   width: '100%',
@@ -89,7 +90,7 @@ const Map = () => {
     <div>
       {loadError && <div className="error">{`Error loading map: ${loadError.message}`}</div>}
       <LoadScript 
-        googleMapsApiKey=""
+        googleMapsApiKey="AIzaSyCjJx8ykUK4Pk-FdagbyR1RhtYTv29-zEU"
         onLoad={() => console.log('Script loaded')}
         onError={(error) => {
           setLoadError(error);

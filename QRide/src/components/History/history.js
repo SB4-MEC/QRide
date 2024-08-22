@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import supabase from "../../config/supabaseClient"; // Import your Supabase client
-import Layout1 from '../Layout1/layout1'; // Assuming you want to use your layout component
+import supabase from "../../config/supabaseClient";
+import Layout1 from '../Layout1/layout1';
 
 const History = () => {
   const [bookings, setBookings] = useState([]);
@@ -11,7 +11,7 @@ const History = () => {
     first_name: "",
     last_name: "",
     email: "",
-    user_id: "", // Make sure user_id is initialized
+    user_id: "",
   });
 
   useEffect(() => {
@@ -58,10 +58,9 @@ const History = () => {
         try {
           const { data, error } = await supabase
             .from('bookings')
-            .select('*') // You can specify columns if needed
-            .eq('user_id', userData.user_id) 
+            .select('*') 
+            .eq('user_id', userData.user_id)
             .order('booking_date', { ascending: false });
-          // Assuming you have a user_id column in your bookings table
 
           if (error) throw error;
           setBookings(data);
@@ -74,7 +73,7 @@ const History = () => {
 
       fetchBookings();
     }
-  }, [userData.user_id]); // Add userData.user_id as a dependency
+  }, [userData.user_id]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -91,9 +90,9 @@ const History = () => {
                 <th style={headerCellStyles}>From Place</th>
                 <th style={headerCellStyles}>To Place</th>
                 <th style={headerCellStyles}>Booking Date</th>
+                <th style={headerCellStyles}>No. Of Tickets</th>
                 <th style={headerCellStyles}>Price</th>
                 <th style={headerCellStyles}>Payment Status</th>
-                <th style={headerCellStyles}>Other Details</th>
               </tr>
             </thead>
             <tbody>
@@ -103,9 +102,9 @@ const History = () => {
                   <td style={cellStyles}>{booking.from_place}</td>
                   <td style={cellStyles}>{booking.to_place}</td>
                   <td style={cellStyles}>{new Date(booking.booking_date).toLocaleString()}</td>
+                  <td style={cellStyles}>{booking.number}</td>
                   <td style={cellStyles}>₹{booking.price}</td>
                   <td style={cellStyles}>{booking.payment_status}</td>
-                  <td style={cellStyles}>{JSON.stringify(booking.other_details)}</td>
                 </tr>
               ))}
             </tbody>
@@ -118,7 +117,6 @@ const History = () => {
   );
 };
 
-// Define improved styles
 const containerStyles = {
   maxWidth: '1000px',
   margin: '2rem auto',
@@ -147,7 +145,7 @@ const headerCellStyles = {
   backgroundColor: '#f4f4f4',
   color: '#555',
   borderBottom: '2px solid #ddd',
-  textAlign: 'left',
+  textAlign: 'center',  // Center align headers
   fontWeight: 'bold',
 };
 
@@ -157,7 +155,7 @@ const rowStyles = {
 
 const cellStyles = {
   padding: '0.75rem',
-  textAlign: 'left',
+  textAlign: 'center',   // Center align cell content
   color: '#666',
 };
 

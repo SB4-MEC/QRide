@@ -17,6 +17,7 @@ const Layout1 = ({ children }) => {
     first_name: "",
     last_name: "",
     email: "",
+    credits:""
   });
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isNavbarHovered, setIsNavbarHovered] = useState(false);
@@ -29,6 +30,7 @@ const Layout1 = ({ children }) => {
         if (error) throw error;
 
         if (user) {
+          console.log("this  userdata");
           console.log(user);
           setUserData({
             email: user.email,
@@ -38,7 +40,7 @@ const Layout1 = ({ children }) => {
           const userId = user.id;
           const { data: namedata, error: nameerror } = await supabase
             .from("user_details")
-            .select("first_name, last_name")
+            .select("first_name, last_name, credits")
             .eq("user_id", userId);
 
           if (nameerror) throw nameerror;
@@ -49,6 +51,7 @@ const Layout1 = ({ children }) => {
               ...prevData,
               first_name: namedata[0].first_name,
               last_name: namedata[0].last_name,
+              credits: namedata[0].credits,
             }));
           }
         }
@@ -56,7 +59,8 @@ const Layout1 = ({ children }) => {
         console.error("Error fetching email:", error.message);
       }
     };
-
+    console.log("this is credits");
+    console.log(userData.credits);
     fetchUser();
   }, []);
 
@@ -100,6 +104,7 @@ const Layout1 = ({ children }) => {
             <p>{userData.first_name} {userData.last_name} </p>
             {/* {userData.name} */}
             <p>{userData.email}</p>
+            <p>Credits:{userData.credits}</p>
             <button onClick={handleLogout}>Logout</button>
           </div>
         </div>
