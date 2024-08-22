@@ -27,17 +27,9 @@ const QRCodeScanner = () => {
   const navigate = useNavigate();
   const [result, setResult] = useState("");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [busStops, setBusStops] = useState([
-    "EDAPPALLY",
-    "THRIKKAKARA",
-    "PIPELINE",
-    "NGO",
-    "CUSAT",
-    // Add more bus stops as needed
-  ]);
+  const [busStops, setBusStops] = useState([]);
 
   const toggleDropdown = () => {
-    // If a QR code has been scanned, do not toggle the dropdown
     if (result) {
       return;
     }
@@ -53,15 +45,15 @@ const QRCodeScanner = () => {
   
   useEffect(() => {
     if (selectedDestination) {
-      navigate("/table");
+      navigate("/table", { state: { busStops } }); // Pass busStops data
     }
-  }, [selectedDestination]); // Dependency array
+  }, [selectedDestination]);
 
   let backgroundImageUrl = `url(${bgdot})`;
   if (window.innerWidth <= 425) {
     backgroundImageUrl = `url(${bgdot1})`;
   }
-  
+
   useEffect(() => {
     // Fetch bus stops on component mount
     const fetchBusStops = async () => {
@@ -99,7 +91,6 @@ const QRCodeScanner = () => {
         setCurrentLocation(busStopTextCodes[scannedText.toLowerCase()]);
         console.log(currentLocation);
 
-        // If the scanned QR is correct, initiate the dropdown menu
         toggleDropdown();
       }
     },
@@ -120,7 +111,7 @@ const QRCodeScanner = () => {
         <img src={Verify} alt="Verify" className="verify-gif" />
       ) : (
         <div className="video-container">
-          <div className="red-line"></div> {/* Red line for scan effect */}
+          <div className="red-line"></div>
           <video className="video" ref={ref} />
           <div className="corner top-left"></div>
           <div className="corner top-right"></div>

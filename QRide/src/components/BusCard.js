@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router';
 
 const BusCard = ({ bus, currentLocation, selectedDestination }) => {
   const [timeMessage, setTimeMessage] = useState('');
+  const [isBusLeft, setIsBusLeft] = useState(false); // New state to track if bus has left
   const [whiteHeartVisible, setWhiteHeartVisible] = useState(true);
   const [redHeartVisible, setRedHeartVisible] = useState(false);
   const [ticketPrice, setTicketPrice] = useState('N/A');
@@ -16,7 +17,6 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
   const MINIMUM_PRICE = 10; // Example minimum price
   const PRICE_PER_KM = 5; // Example price per kilometer
 
-  // Function to fetch distance between currentLocation and selectedDestination
   const getDistanceBetweenPlaces = (origin, destination) => {
     return new Promise((resolve, reject) => {
       if (!window.google || !window.google.maps) {
@@ -42,12 +42,11 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
     });
   };
 
-  // Function to calculate and set the ticket price
   const calculateTicketPrice = async () => {
     try {
       const distance = await getDistanceBetweenPlaces(currentLocation, selectedDestination);
-      const calculatedPrice =(distance * PRICE_PER_KM);
-      const finalPrice = Math.max(MINIMUM_PRICE, calculatedPrice); // Use MAXIMUM_VALUE to ensure minimum price
+      const calculatedPrice = distance * PRICE_PER_KM;
+      const finalPrice = Math.max(MINIMUM_PRICE, calculatedPrice);
 
       setTicketPrice(finalPrice.toFixed(0)); // Round to 2 decimal places
     } catch (error) {
@@ -61,7 +60,7 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
   }, [currentLocation, selectedDestination]);
 
   const handleBusClick = () => {
-    navigate('/booking', { state: { bus, currentLocation, selectedDestination } });
+    navigate('/booking', { state: { bus, currentLocation, selectedDestination, ticketPrice } });
   };
 
   const handleWhiteHeartClick = () => {
@@ -107,8 +106,10 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
       const differenceInMillis = busTime.getTime() - systemTime.getTime();
       if (differenceInMillis < 0) {
         setTimeMessage(`Your bus has left at ${busTime.toLocaleTimeString()}`);
+        setIsBusLeft(true); // Update the state to indicate bus has left
       } else {
         setTimeMessage(`Arrives at ${busTime.toLocaleTimeString()}`);
+        setIsBusLeft(false); // Update the state to indicate bus hasn't left
       }
     }
   }, [bus]);
@@ -117,16 +118,16 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
     <div className="bg-white shadow-md rounded-lg p-4 mb-4 w-full flex flex-col">
       <div className="flex justify-between items-center w-full">
         <div className="flex flex-col w-1/6">
-          <span className="text-l text-gray-500">Bus : {bus.vehicle_number} {bus.bus_name}</span>
+          <span className="text-xl text-gray-600 font-black">Bus : {bus.vehicle_number} {bus.bus_name}</span>
         </div>
         <div className="text-green-600 font-bold text-xl">
           {timeMessage}
         </div>
         <div className="flex flex-col items-start w-1/8">
-          <span className="text-sm text-gray-500">{currentLocation}</span>
+          <span className="text-l text-gray-600 font-black">{currentLocation}</span>
         </div>
         <div className="flex flex-col items-start w-1/8">
-          <span className="text-sm text-gray-500">{selectedDestination}</span>
+          <span className="text-l text-gray-600 font-black">{selectedDestination}</span>
         </div>
         <div className="flex flex-col w-1/8 text-right">
           <div className="text-green-600 font-bold text-xl">
@@ -135,11 +136,7 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
         </div>
         <div className="flex flex-col items-end w-1/8">
           {whiteHeartVisible && (
-            <img
-              src={heart_3}
-              alt="White Heart"
-              onClick={handleWhiteHeartClick}
-            />
+            <img src={heart_3} alt="White Heart" onClick={handleWhiteHeartClick} />
           )}
           {redHeartVisible && (
             <img src={heart_1} alt="Red Heart" onClick={handleRedHeartClick} />
@@ -161,7 +158,11 @@ const BusCard = ({ bus, currentLocation, selectedDestination }) => {
             Live Tracking
           </span>
         </div>
-        <button onClick={handleBusClick} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer">
+        <button
+          onClick={handleBusClick}
+          className={`font-bold py-2 px-4 rounded cursor-pointer ${isBusLeft ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 text-white'}`}
+          disabled={isBusLeft}
+        >
           BOOK NOW
         </button>
       </div>

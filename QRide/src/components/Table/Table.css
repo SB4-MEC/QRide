@@ -1,0 +1,33 @@
+/* Table.css */
+
+
+  
+  .destination-label {
+    font-weight: bold;
+    margin-right: 15px;
+    color: #333; /* Darker color for better readability */
+    font-size: 18px;
+  }
+  
+  .destination-select {
+    padding: 10px 15px;
+    border-radius: 8px; /* More rounded corners */
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  
+    /* Adding box-shadow on focus for better visibility and feedback */
+    &:focus {
+      border-color: #007BFF;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      outline: none;
+    }
+  }
+  
+  .button-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto; 
+  }
+  
