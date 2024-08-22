@@ -28,7 +28,7 @@ const QRCodeScanner = () => {
   const [result, setResult] = useState("");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [busStops, setBusStops] = useState([
-    "EDAPALLY",
+    "EDAPPALLY",
     "THRIKKAKARA",
     "PIPELINE",
     "NGO",
