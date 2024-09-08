@@ -11,6 +11,7 @@ const AuthListener = ({ onLogin, onLogout }) => {
             headers: {
               'Content-Type': 'application/json',
               'apikey': process.env.REACT_APP_ANON_KEY,
+              'Authorization': `Bearer ${process.env.REACT_APP_SUPABASE_ANON_KEY}`, // Optional, depending on your Supabase setup
             },
             body: JSON.stringify({ user_id: session.user.id }),
           });
@@ -32,10 +33,17 @@ const AuthListener = ({ onLogin, onLogout }) => {
               headers: {
                 'Content-Type': 'application/json',
                 'apikey': process.env.REACT_APP_ANON_KEY,
+                'Authorization': `Bearer ${process.env.REACT_APP_SUPABASE_ANON_KEY}`, // Optional, depending on your Supabase setup
               },
             });
-            console.log("Delete response:", response);
-            console.log("User logged out");
+
+            // Check if the delete was successful
+            if (response.ok) {
+              console.log("User logged out and record deleted successfully");
+            } else {
+              const errorDetails = await response.json();
+              console.error("Error deleting user record:", errorDetails);
+            }
           } catch (error) {
             console.error('Error logging user out:', error);
           }
