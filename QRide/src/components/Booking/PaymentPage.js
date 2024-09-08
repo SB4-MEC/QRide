@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import {
   CardNumberElement,
   CardExpiryElement,
@@ -7,22 +7,25 @@ import {
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
+import { CountdownContext } from '../../context/CountdownContext';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import supabase from '../../config/supabaseClient'; // Import your Supabase client
+import supabase from '../../config/supabaseClient';
 import { useNavigate, useLocation } from 'react-router-dom';
-const key=process.env.REACT_APP_STRIPE_PUBLISH_KEY
+import GooglePayButton from "@google-pay/button-react";
+
+const key = process.env.REACT_APP_STRIPE_PUBLISH_KEY;
 const stripePromise = loadStripe(key);
 
 const PaymentForm = ({ setBookingDetails }) => {
+  const{setIsCountdownActive}=useContext(CountdownContext);
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const [paymentRequest, setPaymentRequest] = useState(null);
   const location = useLocation();
   const { userData, bus, currentLocation, selectedDestination, price, ticketCount } = location.state || {};
-  
-  
+
   useEffect(() => {
     if (stripe) {
       const pr = stripe.paymentRequest({
@@ -30,14 +33,14 @@ const PaymentForm = ({ setBookingDetails }) => {
         currency: 'usd',
         total: {
           amount: price * 100,
-          label: 'Ticket Purchase'
+          label: 'Ticket Purchase',
         },
         requestShipping: false,
         requestPayerName: true,
         requestPayerEmail: true,
       });
 
-      pr.canMakePayment().then(result => {
+      pr.canMakePayment().then((result) => {
         if (result) {
           setPaymentRequest(pr);
         }
@@ -47,6 +50,7 @@ const PaymentForm = ({ setBookingDetails }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    navigate('/countdown', { state: { startCountdown: true } });
 
     if (!stripe || !elements) {
       return;
@@ -136,69 +140,146 @@ const PaymentForm = ({ setBookingDetails }) => {
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
       <label className="mt-10 text-2xl">An amount of Rs. {price} will be deducted</label>
-      <div style={{ maxWidth: '600px', width: '100%', backgroundColor: '#fff', padding: '40px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      <div
+        style={{
+          maxWidth: '600px',
+          width: '100%',
+          backgroundColor: '#fff',
+          padding: '40px',
+          border: '1px solid #ccc',
+          borderRadius: '8px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        }}
+      >
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '24px' }}>
-            <label htmlFor="card-number-element" style={{ display: 'block', marginBottom: '12px', fontSize: '18px', color: '#333' }}>Card Number</label>
-            <CardNumberElement id="card-number-element" options={{
-              style: {
-                base: {
-                  fontSize: '16px',
-                  color: '#424770',
-                  '::placeholder': {
-                    color: '#aab7c4',
+            <label htmlFor="card-number-element" style={{ display: 'block', marginBottom: '12px', fontSize: '18px', color: '#333' }}>
+              Card Number
+            </label>
+            <CardNumberElement
+              id="card-number-element"
+              options={{
+                style: {
+                  base: {
+                    fontSize: '16px',
+                    color: '#424770',
+                    '::placeholder': {
+                      color: '#aab7c4',
+                    },
+                  },
+                  invalid: {
+                    color: '#9e2146',
                   },
                 },
-                invalid: {
-                  color: '#9e2146',
-                },
-              },
-            }} />
+              }}
+            />
           </div>
           <div style={{ marginBottom: '24px' }}>
-            <label htmlFor="card-expiry-element" style={{ display: 'block', marginBottom: '12px', fontSize: '18px', color: '#333' }}>Expiration Date</label>
-            <CardExpiryElement id="card-expiry-element" options={{
-              style: {
-                base: {
-                  fontSize: '16px',
-                  color: '#424770',
-                  '::placeholder': {
-                    color: '#aab7c4',
+            <label htmlFor="card-expiry-element" style={{ display: 'block', marginBottom: '12px', fontSize: '18px', color: '#333' }}>
+              Expiration Date
+            </label>
+            <CardExpiryElement
+              id="card-expiry-element"
+              options={{
+                style: {
+                  base: {
+                    fontSize: '16px',
+                    color: '#424770',
+                    '::placeholder': {
+                      color: '#aab7c4',
+                    },
+                  },
+                  invalid: {
+                    color: '#9e2146',
                   },
                 },
-                invalid: {
-                  color: '#9e2146',
-                },
-              },
-            }} />
+              }}
+            />
           </div>
           <div style={{ marginBottom: '24px' }}>
-            <label htmlFor="card-cvc-element" style={{ display: 'block', marginBottom: '12px', fontSize: '18px', color: '#333' }}>CVC</label>
-            <CardCvcElement id="card-cvc-element" options={{
-              style: {
-                base: {
-                  fontSize: '16px',
-                  color: '#424770',
-                  '::placeholder': {
-                    color: '#aab7c4',
+            <label htmlFor="card-cvc-element" style={{ display: 'block', marginBottom: '12px', fontSize: '18px', color: '#333' }}>
+              CVC
+            </label>
+            <CardCvcElement
+              id="card-cvc-element"
+              options={{
+                style: {
+                  base: {
+                    fontSize: '16px',
+                    color: '#424770',
+                    '::placeholder': {
+                      color: '#aab7c4',
+                    },
+                  },
+                  invalid: {
+                    color: '#9e2146',
                   },
                 },
-                invalid: {
-                  color: '#9e2146',
-                },
-              },
-            }} />
+              }}
+            />
           </div>
-          <button type="submit" disabled={!stripe} style={{ marginTop: '24px', padding: '12px 24px', backgroundColor: '#6772E5', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '18px' }}>
+          <button
+            type="submit"
+            disabled={!stripe}
+            style={{
+              marginTop: '24px',
+              padding: '12px 24px',
+              backgroundColor: '#6772E5',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '18px',
+            }}
+          >
             Confirm Payment
           </button>
         </form>
-        { paymentRequest && (
+        {paymentRequest && (
           <div style={{ marginTop: '24px' }}>
             <ExpressCheckoutElement options={{ paymentRequest }} />
           </div>
         )}
       </div>
+      <GooglePayButton
+        className="justify-center py-10 px-10 scale-150 w-auto mt-4" // Adjust margins to ensure it's below the modal
+        environment="TEST"
+        buttonType="pay"
+        paymentRequest={{
+          apiVersion: 2,
+          apiVersionMinor: 0,
+          allowedPaymentMethods: [
+            {
+              type: 'CARD',
+              parameters: {
+                allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                allowedCardNetworks: ['MASTERCARD', 'VISA'],
+              },
+              tokenizationSpecification: {
+                type: 'PAYMENT_GATEWAY',
+                parameters: {
+                  gateway: 'example',
+                  gatewayMerchantId: 'exampleGatewayMerchantId',
+                },
+              },
+            },
+          ],
+          merchantInfo: {
+            merchantId: '12345678901234567890',
+            merchantName: 'Demo Merchant',
+          },
+          transactionInfo: {
+            totalPriceStatus: 'FINAL',
+            totalPriceLabel: 'Total',
+            totalPrice: '100.00',
+            currencyCode: 'INR',
+            countryCode: 'IN',
+          },
+        }}
+        onLoadPaymentData={(paymentRequest) => {
+          console.log('load payment data', paymentRequest);
+        }}
+      />
     </div>
   );
 };

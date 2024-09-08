@@ -1,41 +1,53 @@
 /* src/components/NotificationsList.css */
 
 .notifications-list-container {
-    padding: 2rem;
-    background-color: #f9f9f9;
-  }
-  
-  .notifications-list-container h2 {
-    font-family: 'Poppins', sans-serif;
-    color: #333;
-  }
-  
-  .notifications-list-container ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .notifications-list-container li {
-    background-color: #fff;
-    margin-bottom: 10px;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    font-family: 'Poppins', sans-serif;
-    color: #333;
-  }
-  
-  .notifications-list-container button {
-    background-color: #686665;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: 'Poppins', sans-serif;
-  }
-  
-  .notifications-list-container button:hover {
-    background-color: #575251;
-  }
-  
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.notifications-list-container h2 {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+.notifications-list-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.notifications-list-container li {
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+.notifications-list-container button {
+  background-color: #686665;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.notifications-list-container button:hover {
+  background-color: #575251;
+}
+
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #333;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  z-index: 1000;
+  opacity: 0.9;
+}
+

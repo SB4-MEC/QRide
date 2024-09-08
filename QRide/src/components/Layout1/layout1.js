@@ -8,7 +8,7 @@ import bell_image from "../Assets/bell.jpg"; // Import the bell icon image
 import { useNavigate } from "react-router-dom";
 import bg_image from "../Assets/bg.png";
 import supabase from "../../config/supabaseClient";
-import BusNotifications from '../NotificationBar/Notifications'; // Ensure this path is correct
+
 
 const Layout1 = ({ children }) => {
   const navigate = useNavigate();
@@ -93,7 +93,6 @@ const Layout1 = ({ children }) => {
 
   return (
     <div className="bg-[#c9e9e1]">
-      <BusNotifications /> 
       <div className="bg-image">
         <img src={bg_image} alt="Background" />
       </div>

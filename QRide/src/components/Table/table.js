@@ -3,19 +3,22 @@ import Layout1 from "../Layout1/layout1";
 import BusCard from "../BusCard"; // Import the BusCard component
 import { useBus } from "../../context/BusProvider";
 import supabase from "../../config/supabaseClient";
+import "./Table.css"; // Import the new CSS file for custom styles
 
 const Table = () => {
-  const { currentLocation, selectedDestination } = useBus();
-
+  const { currentLocation, selectedDestination, setSelectedDestination } = useBus();
+  
   const [buses, setBuses] = useState([]);
+  const [busStops, setBusStops] = useState([]);
   const [showSupabaseData, setShowSupabaseData] = useState(true);
+  const [selectedDeparture, setSelectedDeparture] = useState(currentLocation); // New state for selected departure
 
   const fetchBusesFromAPI = async () => {
     try {
-      const response = await fetch(`https://busapi.amithv.xyz/api/v1/schedules?departure=${currentLocation.toLowerCase()}&destination=${selectedDestination.toLowerCase()}`);
+      const response = await fetch(`https://busapi.amithv.xyz/api/v1/schedules?departure=${selectedDeparture.toLowerCase()}&destination=${selectedDestination.toLowerCase()}`);
       const data = await response.json();
     
-      console.log('API Response:', data); 
+      console.log('API Response:', data);
 
       if (Array.isArray(data)) {
         setBuses(data); 
@@ -50,7 +53,7 @@ const Table = () => {
     };
 
     try {
-      const startId = await getId(currentLocation);
+      const startId = await getId(selectedDeparture);
       const endId = await getId(selectedDestination);
       console.log(startId);
       console.log(endId);
@@ -85,20 +88,67 @@ const Table = () => {
     }
   };
 
+  const fetchBusStops = async () => {
+    let { data: busstops, error } = await supabase.from('busstop').select('stop_name');
+    if (error) {
+      console.error("Error retrieving bus stop data: ", error);
+    } else {
+      const sortedBusStops = busstops.sort((a, b) => a.stop_name.localeCompare(b.stop_name));
+      const stopNames = sortedBusStops.map((busstop) => busstop.stop_name);
+      setBusStops(stopNames);
+    }
+  };
+
+  useEffect(() => {
+    fetchBusStops(); // Fetch bus stops when the component mounts
+  }, []);
+
   useEffect(() => {
     if (showSupabaseData) {
       fetchBusesFromSupabase();
     } else {
       fetchBusesFromAPI();
     }
-  }, [currentLocation, selectedDestination, showSupabaseData]);
+  }, [currentLocation, selectedDeparture, selectedDestination, showSupabaseData]);
+
+  const handleDestinationChange = (event) => {
+    setSelectedDestination(event.target.value);
+  };
+
+  const handleDepartureChange = (event) => {
+    setSelectedDeparture(event.target.value);
+  };
 
   return (
     <Layout1>
-      <div className="flex justify-center mt-4">
+      <div className="ml-40 mt-10 px-4">
+        <label htmlFor="departure" className="destination-label">Select Departure:</label>
+        <select
+          id="departure"
+          value={selectedDeparture}
+          onChange={handleDepartureChange}
+          className="destination-select"
+        >
+          {busStops.map((stop, index) => (
+            <option key={index} value={stop}>{stop}</option>
+          ))}
+        </select>
+
+        <label htmlFor="destination" className="destination-label">Select Destination:</label>
+        <select
+          id="destination"
+          value={selectedDestination}
+          onChange={handleDestinationChange}
+          className="destination-select"
+        >
+          {busStops.map((stop, index) => (
+            <option key={index} value={stop}>{stop}</option>
+          ))}
+        </select>
+
         <button 
           onClick={() => setShowSupabaseData(true)} 
-          className={`px-6 py-2 mr-2 rounded-lg transition-all duration-300 ${showSupabaseData ? 'bg-green-500 text-white shadow-lg' : 'bg-gray-200 hover:bg-gray-300'}`}
+          className={`px-6 py-2 mr-2 ml-4 rounded-lg transition-all duration-300 ${showSupabaseData ? 'bg-green-500 text-white shadow-lg' : 'bg-gray-200 hover:bg-gray-300'}`}
         >
           Supabase Data
         </button>
@@ -109,13 +159,14 @@ const Table = () => {
           API Data
         </button>
       </div>
+
       <div className="flex flex-col justify-center ml-40 mt-10 px-4">
         {buses.length > 0 ? (
           buses.map((bus, index) => (
             <BusCard 
               key={index} 
               bus={bus} 
-              currentLocation={currentLocation} 
+              currentLocation={selectedDeparture} 
               selectedDestination={selectedDestination} 
               className="bus-card w-full" 
             />

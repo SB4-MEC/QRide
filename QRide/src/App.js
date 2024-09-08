@@ -15,9 +15,10 @@ import Table from "./components/Table/table";
 import Booking from "./components/Booking/booking";
 import Map from "./components/Map/Map";
 import Favourites from "./components/Favourite/favourite";
-import Notification from "./components/NotificationBar/Notifications"
+import CountDownPage from "./components/CountDown/countdown";
 import NotificationsList from "./components/NotificationList/NotificationList";
 import History from "./components/History/history";
+import AdminPage from "./AdminPage";
 import PaymentPage from './components/Booking/PaymentPage';
 function App() {
   return (
@@ -35,13 +36,15 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="resetpassword" element={<ResetPwd />} />
         <Route path="/notificationlist" element={<NotificationsList />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/countdown" element={<CountDownPage />} />
       </Route>
 
       {/* we want to protect these routes */}
       <Route element={<RequireAuth />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/qr" element={<QRCodeScanner />} />
-        <Route path="/notify" element={<Notification />} />
+
         <Route path="/history" element={<History />} />
         <Route path="payment-page" element={<PaymentPage />} />
       </Route>

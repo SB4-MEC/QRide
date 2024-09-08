@@ -49,7 +49,7 @@ const QRCodeScanner = () => {
 
   useEffect(() => {
     if (selectedDestination) {
-      navigate("/table");
+      navigate("/table", { state: { busStops } }); // Pass busStops data
     }
   }, [selectedDestination]); 
 

@@ -75,7 +75,7 @@ const History = () => {
     }
   }, [userData.user_id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading..</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (

@@ -8,6 +8,7 @@ import { BusProvider } from "./context/BusProvider";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthListener from "./components/AuthListener";
 import { BookingProvider } from './context/BookingContext';
+import { CountdownProvider } from "./context/CountdownContext";
 
 
 
@@ -17,12 +18,14 @@ root.render(
     <AuthProvider>
       <BusProvider>
       <BookingProvider> 
+      <CountdownProvider>
       <AuthListener />
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<App />} />
         </Routes>
       </BrowserRouter>
+      </CountdownProvider>
       </BookingProvider>
       </BusProvider>
     </AuthProvider>
